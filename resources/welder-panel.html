@@ -1,0 +1,1332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MaxLase Welder Panel</title>
+<meta name="description" content="Pulsed Nd:YAG welder settings calculator for the MaxLase 100B, 150B, 200B, 230B and 200P. Pick a material and load, set pulse, current or voltage, frequency and spot, and see joules, peak power, average power and estimated melt depth inside the machine's limits.">
+<meta property="og:title" content="MaxLase Welder Panel">
+<meta property="og:description" content="Set pulse, current, frequency and spot; see joules, peak power, average power and melt depth.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0E4C8A" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1117" media="(prefers-color-scheme: dark)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Saira+Semi+Condensed:wght@500;600;700&display=swap">
+<style>html{-webkit-text-size-adjust:100%}</style>
+</head>
+<body>
+<style>
+:root{
+  --bg:#EBEEF2; --surface:#FFFFFF; --surface-2:#F2F5F9;
+  --ink:#131820; --muted:#5C6672; --rule:#D3D9E1;
+  --panel:#0E4C8A; --panel-2:#0B3D70; --panelface:#E7F1FC; --digit:#12429B;
+  --amber:#E8A32B; --amber-ink:#2A1D05;
+  --ok:#0B6E6B; --warn:#B06A00; --bad:#B3261E;
+  --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -14px rgba(19,24,32,.24);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1117; --surface:#161C24; --surface-2:#1C242E;
+    --ink:#E6EBF2; --muted:#8A95A3; --rule:#28313C;
+    --panel:#0B3A6B; --panel-2:#082C52; --panelface:#132A42; --digit:#8CBEFB;
+    --amber:#E8A32B; --amber-ink:#241800;
+    --ok:#35C2BB; --warn:#E0A44E; --bad:#FF6B62;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 12px 30px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1117; --surface:#161C24; --surface-2:#1C242E;
+  --ink:#E6EBF2; --muted:#8A95A3; --rule:#28313C;
+  --panel:#0B3A6B; --panel-2:#082C52; --panelface:#132A42; --digit:#8CBEFB;
+  --amber:#E8A32B; --amber-ink:#241800;
+  --ok:#35C2BB; --warn:#E0A44E; --bad:#FF6B62;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 12px 30px -16px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 20px 72px}
+
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+h1{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;letter-spacing:-.025em;margin:0;line-height:1.05;text-wrap:balance}
+.deck{font-size:1rem;line-height:1.55;color:var(--muted);margin:0;max-width:64ch}
+
+/* ---- model bar ---- */
+.models{display:flex;flex-wrap:wrap;align-items:center;gap:14px 46px;margin:22px 0 20px}
+.mgroup{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.mgroup.other{padding-left:46px;border-left:1px solid var(--rule)}
+@media (max-width:700px){.mgroup.other{padding-left:0;border-left:none}}
+.mgroup.other .mbtn{font-size:.94rem;padding:8px 14px}
+.mgroup .lbl{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.mbtn{
+  font-family:"Saira Semi Condensed",sans-serif;font-size:1.02rem;font-weight:600;
+  background:var(--surface);color:var(--muted);border:1px solid var(--rule);border-radius:8px;
+  padding:9px 17px;cursor:pointer;transition:all .12s;letter-spacing:.01em
+}
+.mbtn:hover{color:var(--ink);border-color:var(--muted)}
+.mbtn[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.mbtn:focus-visible{outline:2px solid var(--panel);outline-offset:2px}
+
+.grid{display:grid;grid-template-columns:398px minmax(0,1fr);gap:20px;align-items:start}
+.leftcol{display:contents}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* ---- the machine panel ---- */
+.chassis{background:var(--panel);border-radius:14px;padding:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+/* --- 200P skin: yellow labels, red digits, stacked triangles --- */
+.chassis.p{background:#1E77C4;padding:0;gap:0;border:3px solid #10538F}
+.chassis.p .prow{display:grid;grid-template-columns:minmax(0,1fr) 62px;gap:0;align-items:center;
+  border-bottom:2px solid #E9F2FA;padding:7px 0 9px 14px}
+.chassis.p .prow:last-of-type{border-bottom:none}
+.chassis.p .plabelP{font-family:"Archivo",sans-serif;font-weight:700;font-size:.95rem;color:#FFE24A;letter-spacing:.01em;line-height:1.25}
+.chassis.p .pvalP{font-family:"Saira Semi Condensed",sans-serif;font-weight:600;font-size:2.1rem;color:#EF3B2C;line-height:1.05;font-variant-numeric:tabular-nums}
+.chassis.p .pvalP input{font:inherit;color:inherit;background:transparent;border:none;width:4.2ch;padding:0;text-align:left;font-variant-numeric:tabular-nums}
+.chassis.p .pvalP input:focus{outline:none;box-shadow:0 3px 0 #EF3B2C}
+.chassis.p .tri{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding-right:8px}
+.chassis.p .tri button{background:none;border:none;padding:0;cursor:pointer;line-height:0}
+.chassis.p .tri svg{display:block}
+.chassis.p .tri button:disabled{opacity:.35;cursor:not-allowed}
+.chassis.p .tri button:focus-visible{outline:2px solid #FFE24A;outline-offset:2px;border-radius:3px}
+.chassis.p .rngP{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.62rem;letter-spacing:.05em;
+  color:rgba(255,255,255,.82);margin-top:1px}
+.chassis.p .prow{padding:6px 0 7px 14px}
+.chassis.p .chassis-foot{padding:6px 12px 8px;border-top:2px solid #E9F2FA}
+.chassis.p .chassis-foot span{color:rgba(255,255,255,.85)}
+.chassis.p .prow.bad{background:rgba(255,90,80,.28)}
+.prow{display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:9px;align-items:stretch}
+.stp{
+  background:var(--surface-2);color:var(--ink);border:1px solid rgba(0,0,0,.25);border-radius:9px;
+  font-size:1.5rem;font-weight:600;line-height:1;cursor:pointer;padding:0;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.14);transition:transform .06s, background .12s
+}
+.stp:hover{background:var(--surface)}
+.stp:active{transform:translateY(1px);box-shadow:inset 0 1px 3px rgba(0,0,0,.2)}
+.stp:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.stack{border-radius:9px;overflow:hidden;border:1px solid rgba(0,0,0,.25);display:flex;flex-direction:column}
+.plabel{
+  background:var(--amber);color:var(--amber-ink);text-align:center;font-weight:700;
+  font-size:.92rem;letter-spacing:.02em;padding:5px 6px
+}
+.pface{
+  background:var(--panelface);display:flex;align-items:baseline;justify-content:center;gap:8px;
+  padding:7px 8px 8px;flex:1
+}
+.pface input{
+  font-family:"Saira Semi Condensed",sans-serif;font-size:1.85rem;font-weight:700;color:var(--digit);
+  background:transparent;border:none;text-align:right;width:4.6ch;padding:0;margin:0;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em
+}
+.pface input:focus{outline:none;box-shadow:0 2px 0 var(--digit)}
+.pface .unit{font-family:"Saira Semi Condensed",sans-serif;font-size:1.02rem;font-weight:600;color:var(--digit);opacity:.8;width:3.2ch;text-align:left}
+.prow.bad .stack{border-color:var(--bad);box-shadow:0 0 0 2px var(--bad)}
+.chassis .rng{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.64rem;color:rgba(255,255,255,.72);
+  text-align:center;letter-spacing:.04em;margin:-4px 0 2px
+}
+.chassis-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 2px 2px}
+.chassis-foot span{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.64rem;color:rgba(255,255,255,.72);letter-spacing:.06em}
+
+/* ---- outputs ---- */
+.out{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:11px;box-shadow:var(--shadow);overflow:hidden}
+.card-hd{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 15px;border-bottom:1px solid var(--rule);background:var(--surface-2)
+}
+.card-hd h2{margin:0;font-size:.74rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase}
+.card-hd .note{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.69rem;color:var(--muted)}
+.card-body{padding:15px}
+
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule)}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:430px){.tiles{grid-template-columns:1fr}}
+.tile{background:var(--surface);padding:13px 14px;display:flex;flex-direction:column;gap:4px}
+.tile .k{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.63rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:"Saira Semi Condensed",sans-serif;font-size:1.4rem;font-weight:700;letter-spacing:0;font-variant-numeric:tabular-nums;line-height:1.05}
+.tile .f{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;color:var(--muted)}
+.v-blue{color:var(--digit)}
+.v-ok{color:var(--ok)}
+.v-bad{color:var(--bad)}
+
+.statusbar{padding:13px 15px 15px;border-top:1px solid var(--rule)}
+.statusbar .msg{margin:9px 0 0}
+#calFlag{color:var(--warn)}
+.notes-body .setup-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.meter{display:flex;flex-direction:column;gap:7px;padding:14px 15px;border-top:1px solid var(--rule)}
+.meter-top{display:flex;justify-content:space-between;align-items:baseline;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;color:var(--muted)}
+.meter-top b{font-family:"Saira Semi Condensed",sans-serif;font-size:1.05rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:4px;background:var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:4px;transition:width .15s ease}
+.bar.warn i{background:var(--warn)} .bar.bad i{background:var(--bad)}
+
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.69rem;font-weight:500;letter-spacing:.05em;padding:6px 11px;border-radius:999px;border:1px solid var(--ok);color:var(--ok)}
+.chip.warn{border-color:var(--warn);color:var(--warn)}
+.chip.bad{border-color:var(--bad);background:var(--bad);color:var(--surface)}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.msg{font-size:.9rem;line-height:1.5;color:var(--muted);margin:10px 0 0}
+.msg b{color:var(--ink);font-weight:600}
+
+
+
+.leftcol{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card.job{margin-bottom:20px}
+.card.job .card-body{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 26px}
+.pickrow{display:flex;flex-wrap:wrap;justify-content:center;gap:7px}
+.pick{
+  font-family:"Archivo",sans-serif;font-size:.79rem;font-weight:500;background:var(--surface-2);
+  color:var(--muted);border:1px solid var(--rule);border-radius:7px;padding:7px 11px;cursor:pointer;transition:all .12s
+}
+.pick:hover:not(:disabled){color:var(--ink);border-color:var(--muted)}
+.pick[aria-pressed="true"]{background:var(--panel);color:#fff;border-color:var(--panel)}
+.pick:disabled{opacity:.38;cursor:not-allowed;text-decoration:line-through}
+.pick:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.sevrow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.sevlbl{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.seg{display:flex;gap:7px}
+.rec{margin:0;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.74rem;line-height:1.75;color:var(--muted);font-variant-numeric:tabular-nums}
+.rec b{color:var(--ink);font-weight:600}
+.rec .band{opacity:.7}
+.rec .none{color:var(--bad)}
+.matnote{display:inline-block;margin-top:9px;font-size:.88rem;line-height:1.45;color:var(--muted)}
+.matlist{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px 26px}
+.matlist div{display:flex;gap:9px;align-items:baseline}
+.matlist dt{font-weight:600;font-size:.88rem;white-space:nowrap;flex:none;min-width:6.8em}
+.matlist dd{margin:0;font-size:.9rem;line-height:1.45;color:var(--muted)}
+button.act.wide{width:100%;text-align:center}
+.reftab{width:100%;border-collapse:collapse;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.74rem;font-variant-numeric:tabular-nums;min-width:620px}
+.reftab th{text-align:right;font-weight:500;font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--rule);white-space:nowrap}
+.reftab td{text-align:right;padding:7px 10px;border-bottom:1px solid var(--rule);color:var(--ink)}
+.reftab th:first-child,.reftab td:first-child{text-align:left}
+.reftab tr.hit td{background:var(--panelface)}
+.tscroll{overflow-x:auto}
+
+
+.card.beam{margin-bottom:20px}
+.hdctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hdlbl{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pick.sm{font-size:.7rem;padding:5px 9px;border-radius:6px}
+.beam-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:1px;background:var(--rule)}
+@media (max-width:820px){.beam-grid{grid-template-columns:1fr}}
+.beam-pane{background:var(--surface);padding:10px 14px 12px;min-width:0}
+.pane-hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:2px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.66rem;letter-spacing:.06em;color:var(--muted)}
+.pane-hd span:first-child{text-transform:uppercase;letter-spacing:.1em;color:var(--ink);font-weight:500}
+.beam-pane svg{display:block;width:100%;height:auto}
+
+/* ---- setup ---- */
+details.det{background:var(--surface);border:1px solid var(--rule);border-radius:11px;box-shadow:var(--shadow);overflow:hidden}
+details.det>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 15px;background:var(--surface-2);cursor:pointer;list-style:none;border-bottom:1px solid transparent}
+details.det[open]>summary{border-bottom-color:var(--rule)}
+details.det>summary::-webkit-details-marker{display:none}
+details.det>summary h2{margin:0;font-size:.74rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase}
+details.det>summary::after{content:"▾";font-size:.9rem;color:var(--muted);margin-left:auto;order:9}
+details.det[open]>summary::after{content:"▴"}
+details.det>summary .note{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.69rem;color:var(--muted)}
+.notes-body{padding:16px}
+.notes-body .cols{grid-template-columns:repeat(auto-fit,minmax(228px,1fr))}
+.notes-body h3{font-size:.68rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;margin:22px 0 12px;color:var(--muted)}
+.notes-body h3:first-child{margin-top:0}
+details.setup{background:var(--surface);border:1px solid var(--rule);border-radius:11px;box-shadow:var(--shadow);overflow:hidden;margin-top:20px}
+details.setup>summary{
+  padding:12px 15px;cursor:pointer;font-size:.74rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
+  background:var(--surface-2);border-bottom:1px solid transparent;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px
+}
+details.setup[open]>summary{border-bottom-color:var(--rule)}
+details.setup>summary::-webkit-details-marker{display:none}
+details.setup>summary::after{content:"▾";font-size:.9rem;color:var(--muted)}
+details.setup[open]>summary::after{content:"▴"}
+.setup-body{padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.fset{display:flex;flex-direction:column;gap:9px;min-width:0}
+.fset h3{margin:0;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.frow{display:grid;grid-template-columns:1fr 80px 80px 74px;gap:7px;align-items:center}
+.frow > span:first-child{font-size:.82rem}
+.frow .hd{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center}
+.f2{display:grid;grid-template-columns:1fr 104px;gap:7px;align-items:center}
+.f2 > span{font-size:.82rem}
+input.num, select.num{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:6px 8px;width:100%;
+  font-variant-numeric:tabular-nums;text-align:right
+}
+select.num{text-align:left}
+input.num:focus, select.num:focus{outline:2px solid var(--panel);outline-offset:0}
+.setup-note{font-size:.86rem;line-height:1.5;color:var(--muted);margin:2px 0 0}
+.btns{display:flex;gap:9px;flex-wrap:wrap;margin-top:2px}
+button.act{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  background:transparent;color:var(--ink);border:1px solid var(--muted);border-radius:6px;padding:8px 12px;cursor:pointer;transition:all .12s
+}
+button.act:hover{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button.act.ghost{color:var(--muted);border-color:var(--rule)}
+button.act.ghost:hover{background:transparent;color:var(--ink);border-color:var(--muted)}
+button.act:focus-visible{outline:2px solid var(--panel);outline-offset:2px}
+
+.banner{
+  display:flex;gap:11px;align-items:flex-start;border:1px solid var(--warn);border-radius:10px;
+  padding:12px 14px;margin:20px 0 0;background:var(--surface)
+}
+.banner .tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);border:1px solid var(--warn);border-radius:4px;padding:2px 6px;flex:none;margin-top:1px}
+.banner p{margin:0;font-size:.9rem;line-height:1.5;color:var(--muted)}
+.banner b{color:var(--ink)}
+
+.notes{margin-top:34px;padding-top:28px;border-top:1px solid var(--rule)}
+.notes h3{font-size:.72rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;margin:0 0 16px;color:var(--muted)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.cols p{font-size:.94rem;line-height:1.55;color:var(--muted);margin:0}
+.cols h4{margin:0 0 7px;font-size:.86rem;font-weight:600;color:var(--ink)}
+.eq{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.79rem;background:var(--surface-2);border:1px solid var(--rule);border-radius:6px;padding:8px 10px;margin:0 0 8px;overflow-x:auto;white-space:nowrap}
+.srcs{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;color:var(--muted);margin-top:18px;line-height:1.8;overflow-wrap:anywhere}
+.srcs a{color:var(--muted)}
+.backbar{max-width:1180px;margin:0 auto;padding:18px 20px 0;}
+.backbar a{
+  display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;
+  color:var(--muted);text-decoration:none;border:1px solid var(--rule);border-radius:8px;
+  padding:7px 12px;background:var(--surface);transition:color .12s,border-color .12s;
+}
+.backbar a:hover{color:var(--ink);border-color:var(--ink);}
+</style>
+
+<div class="backbar"><a href="/resources.html">&larr; Back to MaxLase Resources</a></div>
+<div class="wrap">
+  <p class="eyebrow">Pulsed Nd:YAG spot welder &middot; front-panel calculator</p>
+  <h1>MaxLase Welder Panel</h1>
+
+  <div class="models">
+    <div class="mgroup">
+      <span class="lbl">Standard</span>
+      <button class="mbtn" type="button" data-model="100" aria-pressed="true">100B</button>
+      <button class="mbtn" type="button" data-model="200.5" aria-pressed="false">200P</button>
+    </div>
+    <div class="mgroup other">
+      <span class="lbl">Also available</span>
+      <button class="mbtn" type="button" data-model="150" aria-pressed="false">150B</button>
+      <button class="mbtn" type="button" data-model="200" aria-pressed="false">200B</button>
+      <button class="mbtn" type="button" data-model="230" aria-pressed="false">230B</button>
+    </div>
+  </div>
+
+  <div class="card job">
+    <div class="card-hd"><h2>The job</h2><span class="note" id="srcTag"></span></div>
+    <div class="card-body">
+      <div class="pickrow" id="matPick">
+        <button class="pick" type="button" data-mat="stainless" aria-pressed="true">Stainless steel</button>
+        <button class="pick" type="button" data-mat="steel" aria-pressed="false">Steel</button>
+        <button class="pick" type="button" data-mat="inconel" aria-pressed="false">Inconel</button>
+        <button class="pick" type="button" data-mat="gold" aria-pressed="false">Gold</button>
+        <button class="pick" type="button" data-mat="platinum" aria-pressed="false">Platinum</button>
+        <button class="pick" type="button" data-mat="silver" aria-pressed="false">Silver</button>
+        <button class="pick" type="button" data-mat="copper" aria-pressed="false">Copper</button>
+        <button class="pick" type="button" data-mat="brass" aria-pressed="false">Brass</button>
+        <button class="pick" type="button" data-mat="aluminum" aria-pressed="false">Aluminum</button>
+      </div>
+      <div class="sevrow">
+        <span class="sevlbl">Load</span>
+        <div class="seg" id="sevPick">
+          <button class="pick" type="button" data-sev="light" aria-pressed="false">Light</button>
+          <button class="pick" type="button" data-sev="medium" aria-pressed="true">Medium</button>
+          <button class="pick" type="button" data-sev="heavy" aria-pressed="false">Heavy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card beam">
+    <div class="card-hd">
+      <h2>Beam profile</h2>
+      <span class="note">rounded pulse &middot; flat&#8209;top spot &mdash; typical of a lamp&#8209;pumped Nd:YAG rod</span>
+    </div>
+    <div class="beam-grid">
+      <div class="beam-pane">
+        <div class="pane-hd"><span>Power vs time</span><span id="plotNote"></span></div>
+        <svg id="svg" viewBox="0 0 700 432" role="img" aria-label="Pulse shape and shot train"></svg>
+      </div>
+      <div class="beam-pane">
+        <div class="pane-hd"><span>Across the spot</span><span id="spotNote"></span></div>
+        <svg id="svgSpot" viewBox="0 0 340 300" role="img" aria-label="Spot profile"></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- ============ the panel ============ -->
+        <div class="chassis" id="chassis"></div>
+
+    <!-- ============ outputs ============ -->
+    <div class="out">
+      <details class="card det" id="deliv" open>
+        <summary>
+          <h2>What that shot delivers</h2>
+          <span class="note"><span id="calFlag"></span></span>
+        </summary>
+        <div class="tiles">
+          <div class="tile"><span class="k">Energy / pulse</span><span class="v v-blue" id="oE">&mdash;</span><span class="f">peak &times; width</span></div>
+          <div class="tile"><span class="k">Peak power</span><span class="v" id="oPk">&mdash;</span><span class="f" id="oPkF">&mdash;</span></div>
+          <div class="tile"><span class="k">Average power</span><span class="v" id="oAv">&mdash;</span><span class="f" id="oAvF">&mdash;</span></div>
+          <div class="tile"><span class="k">Duty cycle</span><span class="v" id="oD">&mdash;</span><span class="f">on-time fraction</span></div>
+          <div class="tile"><span class="k">Melt depth</span><span class="v" id="oDepth">&mdash;</span><span class="f">estimate &plusmn;50 %</span></div>
+          <div class="tile"><span class="k">Weld mode</span><span class="v" id="oMode">&mdash;</span><span class="f" id="oModeF">&mdash;</span></div>
+        </div>
+        <div class="meter">
+          <div class="meter-top"><span>Average power against the machine rating</span><b id="mPct">&mdash;</b></div>
+          <div class="bar" id="mBar"><i style="width:0%"></i></div>
+          <div class="meter-top"><span id="mMax">&mdash;</span></div>
+        </div>
+        <div class="statusbar" id="statusbar">
+          <span class="chip" id="chip"><span class="dot"></span><span id="chipTxt">Within limits</span></span>
+          <p class="msg" id="msg"></p>
+        </div>
+      </details>
+
+      <details class="card det" id="notesCard">
+        <summary><h2>Notes &amp; machine setup</h2><span class="note">limits, calibration, and how it all works</span></summary>
+        <div class="notes-body">
+          <h3>Machine setup</h3>
+          <div class="setup-body" style="padding:0">
+
+            <div class="fset">
+              <h3 style="margin:0">Panel limits (this machine)</h3>
+              <div class="frow"><span></span><span class="hd">Min</span><span class="hd">Max</span><span class="hd">Step</span></div>
+              <div class="frow"><span>Pulse (ms)</span>
+                <input class="num" type="number" id="s-pulse-min" step="0.1"><input class="num" type="number" id="s-pulse-max" step="0.1"><input class="num" type="number" id="s-pulse-step" step="0.1"></div>
+              <div class="frow" id="row-current"><span>Current (A)</span>
+                <input class="num" type="number" id="s-current-min" step="1"><input class="num" type="number" id="s-current-max" step="1"><input class="num" type="number" id="s-current-step" step="1"></div>
+              <div class="frow" id="row-voltage"><span>Voltage (%)</span>
+                <input class="num" type="number" id="s-voltage-min" step="1"><input class="num" type="number" id="s-voltage-max" step="1"><input class="num" type="number" id="s-voltage-step" step="1"></div>
+              <div class="frow"><span>Freq (Hz)</span>
+                <input class="num" type="number" id="s-freq-min" step="0.1"><input class="num" type="number" id="s-freq-max" step="0.1"><input class="num" type="number" id="s-freq-step" step="0.1"></div>
+              <div class="frow"><span>Spot (mm)</span>
+                <input class="num" type="number" id="s-spot-min" step="0.1"><input class="num" type="number" id="s-spot-max" step="0.1"><input class="num" type="number" id="s-spot-step" step="0.1"></div>
+              <p class="setup-note">The ends of the ranges on your own panel. Values outside them turn the row red instead of being silently clamped.</p>
+            </div>
+
+            <div class="fset">
+              <h3 style="margin:0">Calibration &mdash; one measured shot</h3>
+              <div class="f2"><span id="c-I-lbl">Current setting (A)</span><input class="num" type="number" id="c-I" step="1"></div>
+              <div class="f2"><span>Pulse width (ms)</span><input class="num" type="number" id="c-t" step="0.1"></div>
+              <div class="f2"><span>Energy produced (J)</span><input class="num" type="number" id="c-E" step="0.1"></div>
+              <div class="f2"><span id="c-th-lbl">Lasing threshold (A)</span><input class="num" type="number" id="c-th" step="1"></div>
+              <p class="setup-note">Until you enter one, everything runs off a <b>placeholder</b> lamp curve &mdash; right shape, wrong numbers. Lamp current is not watts: output climbs from a threshold, so one real shot fixes the whole curve. On the 200P it is voltage, and stored energy goes as V&sup2;. Leave the threshold at 0 if you don't know it.</p>
+            </div>
+
+            <div class="fset">
+              <h3 style="margin:0">Beam shape &amp; rating</h3>
+              <div class="f2"><span>Pulse shape</span>
+                <select class="num" id="c-shape">
+                  <option value="0.90">Rounded (0.90)</option>
+                  <option value="1.00">Square (1.00)</option>
+                  <option value="1.0645">Gaussian FWHM (1.06)</option>
+                </select></div>
+              <div class="f2"><span>Spot profile</span>
+                <select class="num" id="c-spot">
+                  <option value="flat">Flat-top (multimode)</option>
+                  <option value="gauss">Gaussian (single mode)</option>
+                </select></div>
+              <div class="f2"><span>Rated average (W)</span><input class="num" type="number" id="c-rated" step="1"></div>
+              <p class="setup-note">A lamp-pumped Nd:YAG rod gives a <b>rounded</b> pulse and runs highly multimode, so the focused spot is closer to a <b>flat top</b> than a Gaussian. Those are the defaults.</p>
+              <div class="btns">
+                <button class="act" type="button" id="save">Save to this browser</button>
+                <button class="act ghost" type="button" id="restore">Restore defaults</button>
+              </div>
+            </div>
+
+          </div>
+
+          <h3>Where the recommended settings come from</h3>
+          <p class="setup-note">Stainless steel, gold, silver, copper and aluminum come from manufacturer parameter tables for this class of machine; the <b>230B</b> and <b>200P</b> start from the 200B numbers. Steel, inconel, platinum and brass are marked <b>derived</b> &mdash; scaled from those by 1064&nbsp;nm absorptivity, thermal conductivity and melting point. A place to begin, not a spec. <b>Always test on scrap first.</b></p>
+
+          <h3>The metals</h3>
+          <dl class="matlist" id="matList"></dl>
+
+          <h3>The four knobs</h3>
+          <div class="cols">
+      <div>
+        <h4>Current sets the height</h4>
+        <div class="eq">P_peak = K &times; (I &minus; I_th)</div>
+        <p>The current knob drives the flashlamp, and laser output climbs roughly linearly once the lamp is over the lasing threshold. It is not volts &times; amps, which is why the tool wants one measured shot instead of guessing.</p>
+            </div>
+      <div>
+        <h4>Pulse sets the width</h4>
+        <div class="eq">E = P_peak &times; t_p &times; shape</div>
+        <p>Joules are the area under the shot. Wider pulse at the same current means more energy into the same spot &mdash; more melt depth, more heat into the part, more risk of blowing thin sections.</p>
+            </div>
+      <div>
+        <h4>Freq sets how often</h4>
+        <div class="eq">P_avg = E &times; f</div>
+        <p>Every shot is identical; frequency only decides how many per second. This is the number the machine's rating caps, and it is what limits how fast you can run a seam.</p>
+            </div>
+      <div>
+        <h4>Spot sets the concentration</h4>
+        <div class="eq">density = P_peak / (&pi; d&sup2; / 4)</div>
+        <p>The same joules through a smaller spot is a completely different weld. Roughly: under about <b>0.3&nbsp;kW/mm&sup2;</b> you are only heating the surface; from there up to about <b>10&nbsp;kW/mm&sup2;</b> is conduction welding, a shallow rounded bead; above that you are into a keyhole &mdash; deep, narrow, and easy to overdo on a thin edge. Silver and copper sit high on that scale on purpose, because most of the beam bounces straight off.</p>
+            </div>
+          </div>
+
+          <h3>Where the melt-depth number comes from</h3>
+          <p class="setup-note">Two limits, whichever bites first. <b>Energy:</b> the absorbed joules can only melt so much metal &mdash; depth = A&nbsp;&times;&nbsp;E divided by spot area, density, specific heat to the melting point and latent heat of fusion. <b>Conduction:</b> heat only travels &radic;(4&thinsp;&alpha;&thinsp;t) into the part during the pulse, so nothing deeper than that gets hot. The two are combined with a melting efficiency that falls as heat runs sideways out of the spot &mdash; which is why silver and copper give thin welds for a lot of energy.</p>
+          <p class="setup-note" style="margin-top:10px">Treat it as <b>&plusmn;50&nbsp;%</b>, and as a comparison tool rather than a measurement. It assumes a clean, flat, well-fitted surface and a conduction weld. It does not model keyhole drilling, weld-pool convection, joint gaps, surface finish, oxide, shielding gas, or heat left over from the previous shot. Absorptivity in particular is a moving target: a polished silver surface reflects about 97&nbsp;% cold, but once a melt pool forms coupling climbs steeply, so the figures used here are effective weld-time values, not room-temperature ones.</p>
+
+          <h3>Reference welding-trial data</h3>
+
+      <p class="setup-note" style="margin:0 0 12px">From a published welding-trial study. Note the interaction times: 0.1&ndash;0.19&nbsp;s, roughly a hundred times longer than a 2&nbsp;ms spot shot, so the penetration column does not transfer directly to this machine. The power-density column does &mdash; it is the same axis your shot is measured on above.</p>
+      <div class="tscroll"><table class="reftab" id="refTab">
+        <thead><tr><th>#</th><th>Laser power</th><th>Scan speed</th><th>Power density</th><th>Interaction time</th><th>Point energy</th><th>Penetration</th><th>Intermetallic</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+
+          <h3>Sources</h3>
+          <p class="srcs" style="margin-top:0">
+      Shape and driver background &mdash;
+      <a href="https://www.rp-photonics.com/lamp_pumped_lasers.html">RP Photonics: lamp-pumped lasers</a> &middot;
+      <a href="https://amadaweldtech.com/blog/ndyag-versus-fiber-laser-welding-what-are-your-options/">AMADA WELD TECH: Nd:YAG vs fiber</a> &middot;
+      <a href="https://www.amadaweldtech.eu/sites/default/files/documents/whitepapers/Laser%20Welding%20Fundamentals%202016.pdf">Laser Welding Fundamentals (PDF)</a>
+    </p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+
+
+
+
+
+</div>
+
+<script>
+(function(){
+  var RATED = {100:100, 150:150, 200:200, 230:230, 200.5:200};
+  var MODELNAME = {100:'100B', 150:'150B', 200:'200B', 230:'230B', 200.5:'200P'};
+  // which knob drives the lamp, and what the panel calls it
+  var DRIVE = {
+    100:'current', 150:'current', 200:'current', 230:'current', 200.5:'voltage'
+  };
+  var PANEL = {
+    current:{ key:'current', label:'Current', unit:'A',  labelP:'Current(A)' },
+    voltage:{ key:'voltage', label:'Voltage', unit:'%',  labelP:'Voltage(%)' }
+  };
+  function drive(){ return DRIVE[S.model] || 'current'; }
+  function isP(){ return S.model === 200.5; }
+
+  // placeholder lamp-curve calibration per model (one measured shot each).
+  // E is what that current + width is assumed to produce until the operator measures it.
+  var CAL0 = {
+    100:   { I:90,  t:2.0, E:7.2,  th:5 },
+    150:   { I:70,  t:2.0, E:10.8, th:5 },
+    200:   { I:65,  t:2.0, E:14.4, th:5 },
+    230:   { I:65,  t:2.0, E:16.7, th:5 },
+    200.5: { I:50,  t:2.0, E:4.46, th:5 }   // I = voltage %, th = % below which it will not lase
+  };
+
+  // Rows tagged src:'chart' come from published manufacturer parameter tables.
+  // Rows tagged src:'derived' are scaled from those rows by 1064 nm absorptivity,
+  // thermal conductivity and melting point — a starting point, not a spec.
+  var MAT = {
+    stainless:{ label:'Stainless steel', src:'chart', rows:{
+      100:{pulse:[2,4],     current:[20,40],   freq:[3,10], spot:[0.8,2.0]},
+      150:{pulse:[2,4],     current:[10,30],   freq:[3,10], spot:[0.8,2.5]},
+      200:{pulse:[2,4],     current:[10,20],   freq:[3,10], spot:[0.8,3.0]} }},
+    steel:{ label:'Steel', src:'derived', rows:{
+      100:{pulse:[2,4],     current:[25,45],   freq:[3,10], spot:[0.8,2.0]},
+      150:{pulse:[2,4],     current:[15,35],   freq:[3,10], spot:[0.8,2.5]},
+      200:{pulse:[2,4],     current:[12,25],   freq:[3,10], spot:[0.8,3.0]} }},
+    inconel:{ label:'Inconel', src:'derived', rows:{
+      100:{pulse:[3,5],     current:[22,42],   freq:[2,6],  spot:[0.6,1.5]},
+      150:{pulse:[3,5],     current:[15,32],   freq:[2,6],  spot:[0.6,2.0]},
+      200:{pulse:[3,5],     current:[12,25],   freq:[2,6],  spot:[0.6,2.5]} }},
+    gold:{ label:'Gold', src:'chart', rows:{
+      100:{pulse:[2,2],     current:[40,60],   freq:[1,8],  spot:[0.5,1.5]},
+      150:{pulse:[1.5,3],   current:[25,50],   freq:[3,8],  spot:[0.8,2.0]},
+      200:{pulse:[1.5,3],   current:[20,40],   freq:[3,8],  spot:[0.8,2.5]} }},
+    platinum:{ label:'Platinum', src:'derived', rows:{
+      100:{pulse:[2,4],     current:[32,52],   freq:[2,6],  spot:[0.5,1.2]},
+      150:{pulse:[2,4],     current:[25,42],   freq:[3,6],  spot:[0.6,1.8]},
+      200:{pulse:[2,4],     current:[22,36],   freq:[3,6],  spot:[0.6,2.2]} }},
+    silver:{ label:'Silver', src:'chart', rows:{
+      100:{pulse:[1.5,1.5], current:[80,100],  freq:[2,5],  spot:[0.2,0.6]},
+      150:{pulse:[2,3],     current:[65,75],   freq:[3,6],  spot:[0.2,0.6]},
+      200:{pulse:[2,3],     current:[60,70],   freq:[3,6],  spot:[0.3,0.8]} }},
+    copper:{ label:'Copper', src:'chart', rows:{
+      100:{pulse:[2,2],     current:[100,120], freq:[2,3],  spot:[0.2,0.6]},
+      150:{pulse:[2,2],     current:[80,100],  freq:[2,3],  spot:[0.2,0.6]},
+      200:{pulse:[2,2],     current:[70,100],  freq:[2,3],  spot:[0.2,0.6]} }},
+    brass:{ label:'Brass', src:'derived', rows:{
+      100:{pulse:[1.5,2.5], current:[70,95],   freq:[2,4],  spot:[0.3,0.8]},
+      150:{pulse:[1.5,2.5], current:[55,75],   freq:[2,4],  spot:[0.3,0.8]},
+      200:{pulse:[1.5,2.5], current:[50,68],   freq:[2,4],  spot:[0.3,1.0]} }},
+    aluminum:{ label:'Aluminum', src:'chart', rows:{
+      100:{pulse:[2,5],     current:[55,90],   freq:[3,6],  spot:[0.5,1.5]},
+      150:{pulse:[2,5],     current:[45,75],   freq:[3,6],  spot:[0.5,1.5]},
+      200:{pulse:[2,5],     current:[40,60],   freq:[3,6],  spot:[0.5,1.5]} }}
+  };
+  // thermal properties for the melt-depth estimate.
+  // A is an EFFECTIVE absorptivity at 1064 nm during the weld, not the cold polished value —
+  // once the surface melts, coupling rises well above the room-temperature figure.
+  var PROP = {
+    stainless:{ rho:7900,  cp:500, k:16,  Tm:1400, Lf:260e3, A:0.55 },
+    steel:    { rho:7850,  cp:490, k:50,  Tm:1500, Lf:270e3, A:0.55 },
+    inconel:  { rho:8440,  cp:430, k:11,  Tm:1350, Lf:270e3, A:0.55 },
+    gold:  { rho:15600, cp:135, k:190, Tm:900,  Lf:63e3,  A:0.12 },
+    platinum: { rho:21450, cp:133, k:72,  Tm:1768, Lf:114e3, A:0.40 },
+    silver:{ rho:10400, cp:235, k:420, Tm:900,  Lf:105e3, A:0.08 },
+    copper:   { rho:8960,  cp:385, k:400, Tm:1085, Lf:205e3, A:0.10 },
+    brass:    { rho:8500,  cp:380, k:120, Tm:930,  Lf:160e3, A:0.20 },
+    aluminum: { rho:2700,  cp:900, k:237, Tm:660,  Lf:397e3, A:0.20 }
+  };
+  var SEV = { light:0, medium:0.5, heavy:1 };
+  var UNIT = { pulse:'ms', current:'A', voltage:'%', freq:'Hz', spot:'mm' };
+  var NICE = { pulse:'pulse width', current:'current', voltage:'voltage', freq:'rep rate', spot:'spot' };
+  var MATNOTE = {
+    stainless:'Absorbs 1064 nm better than anything else on the list, so it takes the least current.',
+    steel:'Absorbs as well as stainless but pulls heat out of the joint about three times faster — a little more current.',
+    inconel:'Low conductivity keeps the heat where you put it. A longer, gentler pulse helps it resist hot cracking.',
+    gold:'Reflective and very conductive — heat runs out of the joint fast, so the shot has to be quick. Karat matters less than colour: white gold, alloyed with nickel or palladium, welds noticeably easier than yellow.',
+    platinum:'Melts near 1770 °C, far above gold, but it is much less reflective and less conductive, so it takes the beam well.',
+    silver:'The most reflective metal here at 1064 nm. That is why it wants the highest current and the tightest spot. Sterling and fine silver behave close enough that the fineness does not change the settings.',
+    copper:'Reflective and the best heat conductor on the list: short pulse, tight spot, low rate.',
+    brass:'The zinc boils at 907 °C, well under the melt. Keep the pulse short and the rate low or you get spatter and porosity.',
+    aluminum:'Oxide skin plus high conductivity. A wider pulse spreads the energy in without blowing through.'
+  };
+
+  // reference welding-trial data from the same sheet
+  var REF = [
+    [1,3,8,1.69,0.187,561,null,null],
+    [2,3,10,1.69,0.15,450,75,'3–5'],
+    [3,3,15,1.69,0.1,300,null,null],
+    [4,3.5,8,1.98,0.187,655,808,'7–31'],
+    [5,3.5,10,1.98,0.15,525,458,'3–12'],
+    [6,3.5,15,1.98,0.1,350,198,'1–6'],
+    [7,4,8,2.26,0.187,748,477,'4–19'],
+    [8,4,10,2.26,0.15,600,292,'7'],
+    [9,4,15,2.26,0.1,400,null,null]
+  ];
+
+  var DEF = {
+    model: 100,
+    mat: 'stainless',
+    sev: 'medium',
+    v: { pulse:3.0, current:30, voltage:12, freq:6, spot:1.4 },
+    lim: {
+      pulse:{min:0.1, max:20, step:0.1, dp:1},
+      current:{min:0, max:150, step:1, dp:0},
+      voltage:{min:0, max:100, step:1, dp:0},
+      freq:{min:0, max:20, step:1, dp:0},
+      spot:{min:0.2, max:3.0, step:0.1, dp:1}
+    },
+    cals: JSON.parse(JSON.stringify(CAL0)),
+    shape: 0.90,
+    spotProfile: 'flat',
+    rated: 100,
+    calibrated: false
+  };
+  var S = JSON.parse(JSON.stringify(DEF));
+  function cal(){ return S.cals[S.model] || CAL0[100]; }
+  function chartModel(){ return (S.model === 230 || S.model === 200.5) ? 200 : S.model; }
+
+  // ---------- storage ----------
+  var MAT_KEYS = {stainless:1,steel:1,inconel:1,gold:1,platinum:1,silver:1,copper:1,brass:1,aluminum:1};
+  function load(){
+    try{
+      var raw = localStorage.getItem('yagPanel');
+      if(!raw) return;
+      var o = JSON.parse(raw);
+      if(o && o.v && o.lim && o.cals){
+        if(!MAT_KEYS[o.mat]) o.mat = 'stainless';
+        if(o.v && o.v.voltage === undefined) o.v.voltage = 12;
+        if(o.lim && !o.lim.voltage) o.lim.voltage = {min:0,max:100,step:1,dp:0};
+        if(o.cals && !o.cals[200.5]) o.cals[200.5] = {I:50,t:2.0,E:4.46,th:5};
+        S = { model:o.model||100, mat:o.mat||'stainless', sev:o.sev||'medium',
+              v:o.v, lim:o.lim, cals:o.cals,
+              shape:o.shape||0.90, spotProfile:o.spotProfile||'flat', rated:o.rated||RATED[o.model||100],
+              calibrated: !!o.calibrated };
+      }
+    }catch(e){}
+  }
+  function save(){
+    try{ localStorage.setItem('yagPanel', JSON.stringify(S)); }catch(e){}
+  }
+
+  // ---------- formatting ----------
+  function fx(v, dp){ return (isFinite(v)?v:0).toFixed(dp); }
+  function fmtJ(j){
+    if(!isFinite(j)||j<=0) return '0 J';
+    if(j>=100) return j.toFixed(0)+' J';
+    if(j>=10) return j.toFixed(1)+' J';
+    if(j>=1) return j.toFixed(2)+' J';
+    return (j*1000).toFixed(j*1000>=100?0:1)+' mJ';
+  }
+  function fmtW(w){
+    if(!isFinite(w)||w<=0) return '0 W';
+    if(w>=1e6) return (w/1e6).toFixed(2)+' MW';
+    if(w>=1e3) return (w/1e3).toFixed(w/1e3>=100?0:2)+' kW';
+    if(w>=1) return w.toFixed(w>=100?0:1)+' W';
+    return (w*1000).toFixed(0)+' mW';
+  }
+  function fmtPct(x){
+    var p=x*100;
+    if(p>=10) return p.toFixed(0)+' %';
+    if(p>=1) return p.toFixed(1)+' %';
+    if(p>0) return p.toFixed(2)+' %';
+    return '0 %';
+  }
+  function fmtDen(wcm2){
+    if(!isFinite(wcm2)||wcm2<=0) return '0';
+    if(wcm2>=1e6) return (wcm2/1e6).toFixed(wcm2/1e6>=100?0:2)+' MW/cm²';
+    if(wcm2>=1e3) return (wcm2/1e3).toFixed(0)+' kW/cm²';
+    return wcm2.toFixed(0)+' W/cm²';
+  }
+
+  // ---------- model ----------
+  function compute(){
+    var v=S.v, c=cal(), sh=S.shape, dr=drive();
+    var K, Ppk;
+    if(dr === 'voltage'){
+      // capacitor bank: stored energy goes as V^2, output follows it above threshold
+      K = c.E / (sh * (c.t/1000) * Math.max(c.I*c.I - c.th*c.th, 1e-9));
+      Ppk = K * Math.max(v.voltage*v.voltage - c.th*c.th, 0);
+    } else {
+      K = c.E / (sh * (c.t/1000) * Math.max(c.I - c.th, 1e-9));
+      Ppk = K * Math.max(v.current - c.th, 0);
+    }
+    var tp = v.pulse/1000;
+    var E = Ppk * tp * sh;
+    var Pav = E * v.freq;
+    var duty = tp * v.freq;
+    var areaCm2 = Math.PI*Math.pow(v.spot/10,2)/4;   // mm -> cm
+    var fluence = areaCm2>0 ? E/areaCm2 : 0;
+    var density = areaCm2>0 ? Ppk/areaCm2 : 0;
+    var maxF = E>0 ? Math.min(S.lim.freq.max, S.rated/E) : S.lim.freq.max;
+    var areaMm2 = Math.PI*Math.pow(v.spot,2)/4;
+    var pdKwmm = areaMm2>0 ? (Ppk/1000)/areaMm2 : 0;
+
+    // ---- melt-depth estimate (conduction mode) ----
+    var P = PROP[S.mat] || PROP.stainless;
+    var alpha = P.k/(P.rho*P.cp);                       // m^2/s
+    var zTh   = Math.sqrt(4*alpha*tp);                  // heat penetration during the pulse, m
+    var dHvol = P.rho*(P.cp*(P.Tm-20) + P.Lf);          // J per m^3 to reach melt and melt it
+    var areaM2= Math.PI*Math.pow(v.spot/1000,2)/4;
+    var regime = pdKwmm >= 10 ? 'keyhole' : (pdKwmm >= 0.3 ? 'conduction' : 'heating');
+    var Aeff = regime==='keyhole' ? Math.min(P.A*2.2, 0.85) : P.A;
+    var zE   = (areaM2>0 && dHvol>0) ? (Aeff*E)/(areaM2*dHvol) : 0;   // if all of it melted a column
+    var rM   = (v.spot/2)/1000;
+    var etaM = rM>0 ? 1/(1 + zTh/rM) : 0;               // melting efficiency: heat lost sideways
+    var depth = Math.min(zE*etaM, zTh);
+    if(regime==='heating') depth = 0;
+
+    return { K:K, Ppk:Ppk, E:E, Pav:Pav, duty:duty, area:areaCm2, areaMm2:areaMm2,
+             fluence:fluence, density:density, pdKwmm:pdKwmm, maxF:maxF,
+             depth:depth*1000, regime:regime, etaM:etaM, zTh:zTh*1000, Aeff:Aeff, tpEff_s:tp };
+  }
+
+  // ---------- live beam profile ----------
+  function fmtMs(ms){ return ms>=1000 ? (ms/1000).toFixed(2)+' s' : ms.toFixed(0)+' ms'; }
+
+  // normalised pulse profile: returns [[u,y]] with u in 0..1 across the drawn width
+  function pulseProfile(shape, x0px, wpx, ytop, ybase){
+    var pts=[], i, x, u;
+    if(shape >= 1.0 && shape < 1.02){                       // square
+      return [[x0px,ybase],[x0px,ytop],[x0px+wpx,ytop],[x0px+wpx,ybase]];
+    }
+    if(shape > 1.02){                                       // gaussian, wpx = FWHM
+      var cx=x0px+wpx/2, g0=cx-2.1*wpx, g1=cx+2.1*wpx;
+      for(i=0;i<=80;i++){
+        x=g0+(g1-g0)*i/80; u=(x-cx)/wpx;
+        pts.push([x, ybase-Math.exp(-2.7725887*u*u)*(ybase-ytop)]);
+      }
+      return pts;
+    }
+    var r=Math.max(wpx*0.22, 2);                            // rounded / trapezoid
+    return [[x0px-r*0.55,ybase],[x0px+r*0.35,ytop],[x0px+wpx-r*0.35,ytop],[x0px+wpx+r*0.55,ybase]];
+  }
+  function pstr(pts){ return 'L '+pts.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' L '); }
+
+  function drawTemporal(m){
+    var x0=66, x1=676, ytop=52, ybase=224, w=x1-x0, h=ybase-ytop;
+    var s=[], c=cal();
+
+    // full-scale axes: y = max peak this machine can make, x = fixed timebase
+    var Pmax = peakAtMax();
+    if(!(Pmax>0)) Pmax = Math.max(m.Ppk, 1);
+    var TB = Math.min(S.lim.pulse.max, 10);
+    if(S.v.pulse > TB) TB = S.lim.pulse.max;
+
+    var hFrac = Math.min(m.Ppk/Pmax, 1.12);
+    var pTop  = ybase - hFrac*h;
+    var wpx   = Math.min((S.v.pulse/TB)*w, w);
+    var px0   = x0 + w*0.10;
+    if(px0 + wpx > x1 - 6) px0 = Math.max(x0+4, x1 - 6 - wpx);
+
+    s.push('<defs>'
+      +'<marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="var(--ink)"/></marker>'
+      +'<marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="var(--muted)"/></marker>'
+      +'<pattern id="hx" patternUnits="userSpaceOnUse" width="9" height="9" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="9" stroke="var(--digit)" stroke-width="1.7" opacity=".4"/></pattern>'
+      +'<clipPath id="cp"><rect x="'+x0+'" y="'+(ytop-24)+'" width="'+w+'" height="'+(ybase-ytop+24)+'"/></clipPath>'
+      +'</defs>');
+
+    // grid at 25/50/75/100 % of full scale
+    [0.25,0.5,0.75,1].forEach(function(g){
+      var y = ybase - g*h;
+      s.push('<line x1="'+x0+'" y1="'+y.toFixed(1)+'" x2="'+x1+'" y2="'+y.toFixed(1)+'" stroke="var(--rule)" stroke-width="1" stroke-dasharray="'+(g===1?'0':'2 5')+'" opacity="'+(g===1?'.9':'.7')+'"/>');
+      s.push('<text x="'+(x0-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">'+fmtW(Pmax*g)+'</text>');
+    });
+    s.push('<line x1="'+x0+'" y1="'+(ytop-24)+'" x2="'+x0+'" y2="'+ybase+'" stroke="var(--rule)" stroke-width="1.5"/>');
+    s.push('<line x1="'+x0+'" y1="'+ybase+'" x2="'+x1+'" y2="'+ybase+'" stroke="var(--rule)" stroke-width="1.5"/>');
+    s.push('<text x="'+(x0-8)+'" y="'+(ybase+4)+'" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">0</text>');
+
+    // time ticks
+    var nT = TB<=5?5:(TB<=10?5:4), i;
+    for(i=0;i<=nT;i++){
+      var tx = x0 + (i/nT)*w, tv = (i/nT)*TB;
+      s.push('<line x1="'+tx.toFixed(1)+'" y1="'+ybase+'" x2="'+tx.toFixed(1)+'" y2="'+(ybase+5)+'" stroke="var(--rule)" stroke-width="1.4"/>');
+      s.push('<text x="'+tx.toFixed(1)+'" y="'+(ybase+20)+'" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">'+(tv%1?tv.toFixed(1):tv.toFixed(0))+'</text>');
+    }
+    s.push('<text x="'+x1+'" y="'+(ybase+38)+'" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing="1.2">ms</text>');
+
+    // ghost: same shot at maximum current
+    var gp = pulseProfile(S.shape, px0, wpx, ytop, ybase);
+    s.push('<path d="M '+x0+' '+ybase+' '+pstr(gp)+' L '+x1+' '+ybase+'" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="5 4" opacity=".55" clip-path="url(#cp)"/>');
+    s.push('<text x="'+x1+'" y="'+(ytop-9)+'" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">full scale · '+fx(S.lim[drive()].max,0)+' '+UNIT[drive()]+'</text>');
+
+    // the shot
+    var pp = pulseProfile(S.shape, px0, wpx, pTop, ybase);
+    var closed = 'M '+pp[0][0].toFixed(1)+' '+ybase+' '+pstr(pp)+' L '+pp[pp.length-1][0].toFixed(1)+' '+ybase+' Z';
+    s.push('<path d="'+closed+'" fill="var(--panelface)" clip-path="url(#cp)"/>');
+    s.push('<path d="'+closed+'" fill="url(#hx)" clip-path="url(#cp)"/>');
+    s.push('<path d="M '+x0+' '+ybase+' '+pstr(pp)+' L '+x1+' '+ybase+'" fill="none" stroke="var(--digit)" stroke-width="2.6" stroke-linejoin="round" clip-path="url(#cp)"/>');
+    s.push('<line x1="'+x0+'" y1="'+pTop.toFixed(1)+'" x2="'+x1+'" y2="'+pTop.toFixed(1)+'" stroke="var(--digit)" stroke-width="1.1" stroke-dasharray="7 5" opacity=".7"/>');
+
+    // energy callout into the area
+    var cx = px0 + wpx/2;
+    var tipY = pTop + (ybase-pTop)*0.45;
+    var labY = Math.max(pTop - 26, 22);
+    s.push('<path d="M '+cx.toFixed(1)+' '+(labY+8)+' L '+cx.toFixed(1)+' '+tipY.toFixed(1)+'" fill="none" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#a1)"/>');
+    s.push('<text x="'+(cx-10).toFixed(1)+'" y="'+labY+'" text-anchor="end" fill="var(--ink)" font-family="Saira Semi Condensed, sans-serif" font-size="25" font-weight="700">'+fmtJ(m.E)+'</text>');
+    s.push('<text x="'+(cx+10).toFixed(1)+'" y="'+labY+'" fill="var(--digit)" font-family="IBM Plex Mono, monospace" font-size="12.5">'+fmtW(m.Ppk)+' peak</text>');
+
+    // width dimension
+    var dy = 256;
+    s.push('<line x1="'+px0.toFixed(1)+'" y1="'+(ybase+6)+'" x2="'+px0.toFixed(1)+'" y2="'+dy+'" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/>');
+    s.push('<line x1="'+(px0+wpx).toFixed(1)+'" y1="'+(ybase+6)+'" x2="'+(px0+wpx).toFixed(1)+'" y2="'+dy+'" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/>');
+    s.push('<line x1="'+px0.toFixed(1)+'" y1="'+dy+'" x2="'+(px0+wpx).toFixed(1)+'" y2="'+dy+'" stroke="var(--ink)" stroke-width="1.5" marker-start="url(#a2)" marker-end="url(#a2)"/>');
+    s.push('<text x="'+cx.toFixed(1)+'" y="'+(dy+20)+'" text-anchor="middle" fill="var(--ink)" font-family="IBM Plex Mono, monospace" font-size="13.5">'+fx(S.v.pulse,1)+' ms'+(S.shape>1.02?' FWHM':'')+'</text>');
+    s.push('<text x="'+x1+'" y="'+(dy+20)+'" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="12.5">'
+      + fx(S.v.freq,S.lim.freq.dp)+' Hz · one shot every '+ (S.v.freq>0 ? fmtMs(1000/S.v.freq) : '—') +'</text>');
+
+    // ================= one second of firing =================
+    var sy0=298, sTop=338, sBase=388, f=S.v.freq;
+    s.push('<line x1="'+x0+'" y1="'+sy0+'" x2="'+x1+'" y2="'+sy0+'" stroke="var(--rule)" stroke-width="1"/>');
+    s.push('<text x="'+x0+'" y="'+(sy0+18)+'" fill="var(--ink)" font-family="IBM Plex Mono, monospace" font-size="11.5" letter-spacing="1.1" font-weight="500">ONE SECOND OF FIRING</text>');
+    s.push('<line x1="'+x0+'" y1="'+sBase+'" x2="'+x1+'" y2="'+sBase+'" stroke="var(--rule)" stroke-width="1.4"/>');
+
+    if(f <= 0){
+      s.push('<text x="'+x1+'" y="'+(sy0+18)+'" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">single shot — the rate is at zero</text>');
+      return s.join('');
+    }
+
+    var n = Math.floor(f + 1e-9);
+    var bw = Math.max(m.tpEff_s*w, 2.5);
+    var speed = f * S.v.spot * 0.30;                    // mm/s at 70 % spot overlap
+    s.push('<text x="'+x1+'" y="'+(sy0+18)+'" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">'
+      + n + (n===1?' shot':' shots') + ' · ' + fmtJ(m.E*n) + ' into the part · duty ' + fmtPct(m.duty) + '</text>');
+
+    var q;
+    for(q=0;q<=4;q++){
+      var qx = x0 + (q/4)*w;
+      s.push('<line x1="'+qx.toFixed(1)+'" y1="'+sBase+'" x2="'+qx.toFixed(1)+'" y2="'+(sBase+5)+'" stroke="var(--rule)" stroke-width="1.2"/>');
+      s.push('<text x="'+qx.toFixed(1)+'" y="'+(sBase+19)+'" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11">'+(q===4?'1.00 s':(q*0.25).toFixed(2))+'</text>');
+    }
+
+    var full = sBase - sTop, bh = full*Math.min(m.Ppk/Pmax, 1);
+    var bx, i2, firstX=null, secondX=null;
+    for(i2=0;i2<n;i2++){
+      bx = x0 + ((i2 + 0.5)/f)*w;
+      if(bx > x1) break;
+      if(firstX===null) firstX = bx; else if(secondX===null) secondX = bx;
+      s.push('<rect x="'+(bx-bw/2).toFixed(1)+'" y="'+sTop+'" width="'+bw.toFixed(1)+'" height="'+full+'" fill="var(--digit)" opacity=".22"/>');
+      s.push('<rect x="'+(bx-bw/2).toFixed(1)+'" y="'+(sBase-bh).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'" fill="var(--digit)"/>');
+    }
+    if(secondX !== null && secondX-firstX > 44){
+      var by = sTop + 18, lab = fmtMs(1000/f), lw = lab.length*7 + 12;
+      s.push('<line x1="'+firstX.toFixed(1)+'" y1="'+by+'" x2="'+secondX.toFixed(1)+'" y2="'+by+'" stroke="var(--muted)" stroke-width="1.2" marker-start="url(#a2)" marker-end="url(#a2)"/>');
+      s.push('<rect x="'+(((firstX+secondX)/2)-lw/2).toFixed(1)+'" y="'+(by-15)+'" width="'+lw+'" height="14" fill="var(--surface)"/>');
+      s.push('<text x="'+((firstX+secondX)/2).toFixed(1)+'" y="'+(by-4)+'" text-anchor="middle" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">'+lab+'</text>');
+    }
+    s.push('<text x="'+x0+'" y="'+(sBase+40)+'" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="12">'
+      + 'run a seam at ' + speed.toFixed(speed>=10?0:1) + ' mm/s (' + (speed*60).toFixed(0) + ' mm/min) for 70 % spot overlap</text>');
+
+    return s.join('');
+  }
+
+  function drawSpot(m){
+    var W=340, cx=170, x0=30, x1=310, span=x1-x0;
+    var s=[];
+    var dmax = Math.max(S.lim.spot.max, S.v.spot);
+    var mm = span/(dmax*1.18);                 // px per mm
+    var r  = (S.v.spot/2)*mm;
+    var pTop=30, pBase=104, cy=182, rmax=62;
+    if(r > rmax){ mm = rmax/(S.v.spot/2); r = rmax; }
+
+    // ---- intensity profile across the spot ----
+    var pts=[], i, x, u;
+    if(S.spotProfile === 'gauss'){
+      for(i=0;i<=80;i++){
+        x = x0 + span*i/80; u = (x-cx)/(r||1);
+        pts.push([x, pBase - Math.exp(-2*u*u)*(pBase-pTop)]);
+      }
+    } else {
+      var e = Math.max(r*0.1, 2);
+      pts=[[cx-r-e,pBase],[cx-r+e*0.4,pTop],[cx+r-e*0.4,pTop],[cx+r+e,pBase]];
+    }
+    var closed = 'M '+pts[0][0].toFixed(1)+' '+pBase+' '+pstr(pts)+' L '+pts[pts.length-1][0].toFixed(1)+' '+pBase+' Z';
+    s.push('<defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="var(--muted)"/></marker>'
+      +'<radialGradient id="rg"><stop offset="0%" stop-color="var(--digit)" stop-opacity="'+(S.spotProfile==='gauss'?'.85':'.5')+'"/>'
+      +'<stop offset="'+(S.spotProfile==='gauss'?'55%':'88%')+'" stop-color="var(--digit)" stop-opacity="'+(S.spotProfile==='gauss'?'.28':'.45')+'"/>'
+      +'<stop offset="100%" stop-color="var(--digit)" stop-opacity="'+(S.spotProfile==='gauss'?'.03':'.4')+'"/></radialGradient>'
+      +'<clipPath id="cps"><rect x="'+x0+'" y="18" width="'+span+'" height="'+(pBase-18)+'"/></clipPath></defs>');
+
+    s.push('<line x1="'+x0+'" y1="'+pBase+'" x2="'+x1+'" y2="'+pBase+'" stroke="var(--rule)" stroke-width="1.4"/>');
+    s.push('<path d="'+closed+'" fill="var(--panelface)" clip-path="url(#cps)"/>');
+    s.push('<path d="'+pstr(pts).replace(/^L/,'M')+'" fill="none" stroke="var(--digit)" stroke-width="2.3" stroke-linejoin="round" clip-path="url(#cps)"/>');
+    s.push('<text x="'+x0+'" y="'+(pTop-8)+'" fill="var(--muted)" font-family="IBM Plex Mono, monospace" font-size="11.5">intensity</text>');
+
+    // ---- the spot, to scale ----
+    s.push('<circle cx="'+cx+'" cy="'+cy+'" r="'+r.toFixed(1)+'" fill="url(#rg)" stroke="var(--digit)" stroke-width="1.8"/>');
+    if(S.spotProfile==='gauss'){
+      s.push('<circle cx="'+cx+'" cy="'+cy+'" r="'+(r*0.42).toFixed(1)+'" fill="none" stroke="var(--digit)" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>');
+    }
+    // diameter dimension
+    var dy = cy + Math.max(r,20) + 22;
+    s.push('<line x1="'+(cx-r).toFixed(1)+'" y1="'+cy+'" x2="'+(cx-r).toFixed(1)+'" y2="'+dy+'" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/>');
+    s.push('<line x1="'+(cx+r).toFixed(1)+'" y1="'+cy+'" x2="'+(cx+r).toFixed(1)+'" y2="'+dy+'" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/>');
+    s.push('<line x1="'+(cx-r).toFixed(1)+'" y1="'+dy+'" x2="'+(cx+r).toFixed(1)+'" y2="'+dy+'" stroke="var(--ink)" stroke-width="1.5" marker-start="url(#a3)" marker-end="url(#a3)"/>');
+    s.push('<text x="'+cx+'" y="'+(dy+19)+'" text-anchor="middle" fill="var(--ink)" font-family="IBM Plex Mono, monospace" font-size="13.5">'+fx(S.v.spot,1)+' mm</text>');
+    return s.join('');
+  }
+
+  // ---------- the machine panel ----------
+  function rowsFor(){
+    return isP()
+      ? [{k:'program', label:'Program'}, {k:'voltage', label:'Voltage(%)'},
+         {k:'pulse', label:'Pulse(Ms)'}, {k:'freq', label:'Frequency(Hz)'}, {k:'spot', label:'Spot(MM)'}]
+      : [{k:'pulse', label:'Pulse', unit:'ms'}, {k:'current', label:'Current', unit:'A'},
+         {k:'freq', label:'Freq', unit:'Hz'}, {k:'spot', label:'Spot', unit:'mm'}];
+  }
+  var TRI_UP   = '<svg width="26" height="17" viewBox="0 0 26 17" aria-hidden="true"><path d="M13 1 L25 16 L1 16 Z" fill="#fff"/></svg>';
+  var TRI_DOWN = '<svg width="26" height="17" viewBox="0 0 26 17" aria-hidden="true"><path d="M13 16 L1 1 L25 1 Z" fill="#fff"/></svg>';
+
+  function buildChassis(){
+    var ch = document.getElementById('chassis');
+    var rows = rowsFor(), h = '', i;
+    ch.className = 'chassis' + (isP() ? ' p' : '');
+
+    for(i=0;i<rows.length;i++){
+      var r = rows[i], k = r.k, fixed = (k === 'program');
+      if(isP()){
+        h += '<div class="prow" data-p="'+k+'">'
+           +   '<div>'
+           +     '<div class="plabelP">'+r.label+'</div>'
+           +     '<div class="pvalP">'+(fixed
+                    ? '1'
+                    : '<input type="text" inputmode="decimal" id="in-'+k+'" aria-label="'+r.label+'">')+'</div>'
+           +     (fixed ? '<div class="rngP">fixed</div>' : '<div class="rngP" id="rng-'+k+'"></div>')
+           +   '</div>'
+           +   '<div class="tri">'
+           +     '<button type="button" data-p="'+k+'" data-d="1"'+(fixed?' disabled':'')+' aria-label="Increase '+r.label+'">'+TRI_UP+'</button>'
+           +     '<button type="button" data-p="'+k+'" data-d="-1"'+(fixed?' disabled':'')+' aria-label="Decrease '+r.label+'">'+TRI_DOWN+'</button>'
+           +   '</div>'
+           + '</div>';
+      } else {
+        h += '<div class="prow" data-p="'+k+'">'
+           +   '<button class="stp" type="button" data-p="'+k+'" data-d="-1" aria-label="Decrease '+r.label+'">&minus;</button>'
+           +   '<div class="stack"><div class="plabel">'+r.label+'</div>'
+           +     '<div class="pface"><input type="text" inputmode="decimal" id="in-'+k+'" aria-label="'+r.label+'"><span class="unit">'+r.unit+'</span></div></div>'
+           +   '<button class="stp" type="button" data-p="'+k+'" data-d="1" aria-label="Increase '+r.label+'">+</button>'
+           + '</div>'
+           + '<div class="rng" id="rng-'+k+'"></div>';
+      }
+    }
+    h += '<div class="chassis-foot"><span id="footModel"></span><span id="footCal"></span></div>';
+    ch.innerHTML = h;
+    wireChassis();
+  }
+
+  function activeKeys(){
+    return isP() ? ['voltage','pulse','freq','spot'] : ['pulse','current','freq','spot'];
+  }
+  function wireChassis(){
+    activeKeys().forEach(function(k){
+      var el = document.getElementById('in-'+k);
+      if(!el) return;
+      function commit(){
+        var x=parseFloat(el.value);
+        if(!isFinite(x)){ el.value = fx(S.v[k], S.lim[k].dp); return; }
+        if(Math.abs(x - S.v[k]) < 1e-9){ el.value = fx(S.v[k], S.lim[k].dp); return; }
+        setVal(k, x);
+      }
+      el.addEventListener('change', commit);
+      el.addEventListener('blur', commit);
+      el.addEventListener('keydown', function(e){
+        if(e.key==='Enter'){ el.blur(); }
+        else if(e.key==='ArrowUp'){ e.preventDefault(); setVal(k, S.v[k]+S.lim[k].step); }
+        else if(e.key==='ArrowDown'){ e.preventDefault(); setVal(k, S.v[k]-S.lim[k].step); }
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#chassis [data-d]'), function(b){
+      b.addEventListener('click', function(){
+        var k=b.getAttribute('data-p'), d=parseFloat(b.getAttribute('data-d'));
+        if(k==='program') return;
+        setVal(k, Math.min(S.lim[k].max, Math.max(S.lim[k].min, S.v[k] + d*S.lim[k].step)));
+      });
+    });
+  }
+
+  // ---------- render ----------
+  function outOfRange(k){
+    var L=S.lim[k], x=S.v[k];
+    return x < L.min - 1e-9 || x > L.max + 1e-9;
+  }
+  function render(){
+    var m = compute();
+
+    // panel inputs
+    activeKeys().forEach(function(k){
+      var el=document.getElementById('in-'+k);
+      if(!el) return;
+      if(document.activeElement !== el) el.value = fx(S.v[k], S.lim[k].dp);
+      var rg=document.getElementById('rng-'+k);
+      if(rg) rg.textContent = fx(S.lim[k].min,S.lim[k].dp)+' – '+fx(S.lim[k].max,S.lim[k].dp)+' '+UNIT[k];
+      var pr=document.querySelector('.prow[data-p="'+k+'"]');
+      if(pr) pr.classList.toggle('bad', outOfRange(k));
+    });
+    document.getElementById('footModel').textContent = MODELNAME[S.model] + ' · ' + S.rated + ' W';
+    document.getElementById('footCal').textContent = S.calibrated ? 'calibrated' : 'placeholder calibration';
+    var cf=document.getElementById('calFlag'); if(cf) cf.textContent = S.calibrated ? '' : 'not calibrated';
+
+    document.getElementById('plotNote').textContent = fmtW(m.Ppk) + ' of ' + fmtW(peakAtMax()) + ' available';
+
+    document.getElementById('oE').textContent   = fmtJ(m.E);
+    document.getElementById('oPk').textContent  = fmtW(m.Ppk);
+    document.getElementById('oPkF').textContent = fx(S.v[drive()],0)+' '+UNIT[drive()]+' above a '+cal().th+' '+UNIT[drive()]+' threshold';
+    document.getElementById('oAv').textContent  = fmtW(m.Pav);
+    document.getElementById('oAvF').textContent = fmtJ(m.E)+' × '+fx(S.v.freq,S.lim.freq.dp)+' Hz';
+    document.getElementById('oD').textContent   = fmtPct(m.duty);
+    var dEl = document.getElementById('oDepth');
+    dEl.textContent = m.depth <= 0 ? 'no melt'
+      : (m.depth < 0.05 ? (m.depth*1000).toFixed(0)+' µm' : m.depth.toFixed(m.depth>=1?2:3)+' mm');
+    dEl.className = 'v' + (m.depth<=0 ? '' : ' v-blue');
+    var MODE = {keyhole:['Keyhole','deep, narrow, easy to overdo'],
+                conduction:['Conduction','shallow rounded bead'],
+                heating:['Surface','not enough to melt']};
+    var mo = MODE[m.regime];
+    var moEl = document.getElementById('oMode');
+    moEl.textContent = mo[0];
+    moEl.className = 'v' + (m.regime==='heating' ? ' v-bad' : (m.regime==='keyhole' ? '' : ' v-ok'));
+    document.getElementById('oModeF').textContent = mo[1];
+
+    var util = S.rated>0 ? m.Pav/S.rated : 0;
+    document.getElementById('mPct').textContent = fmtPct(util) + ' of ' + S.rated + ' W';
+    var bar=document.getElementById('mBar');
+    bar.className = 'bar' + (util>1.001 ? ' bad' : util>0.9 ? ' warn' : '');
+    bar.firstElementChild.style.width = Math.min(util,1)*100 + '%';
+    document.getElementById('mMax').textContent =
+      m.E>0 ? ('ceiling: ' + m.maxF.toFixed(m.maxF>=10?0:2) + ' Hz at ' + fmtJ(m.E) + ' per shot' +
+               (m.maxF >= S.lim.freq.max ? ' — the panel runs out first' : '')) : 'set a current above threshold';
+
+    document.getElementById('svg').innerHTML = drawTemporal(m);
+    document.getElementById('svgSpot').innerHTML = drawSpot(m);
+    document.getElementById('spotNote').textContent = S.spotProfile==='gauss'
+      ? 'Gaussian · ' + (m.pdKwmm*2).toFixed(m.pdKwmm*2>=10?1:2) + ' kW/mm² at centre'
+      : 'flat-top · ' + m.pdKwmm.toFixed(m.pdKwmm>=10?1:2) + ' kW/mm² across';
+    document.getElementById('svg').setAttribute('aria-label',
+      fmtJ(m.E)+' per shot, '+fmtW(m.Ppk)+' peak, '+fx(S.v.pulse,1)+' ms wide, '+fx(S.v.freq,1)+' Hz, '+fx(S.v.spot,1)+' mm spot');
+
+    // status
+    var chip=document.getElementById('chip'), txt=document.getElementById('chipTxt'), msg=document.getElementById('msg');
+    var bad=[], quiet=false; activeKeys().forEach(function(k){ if(outOfRange(k)) bad.push(k); });
+    chip.className='chip';
+    if(!recRow()){
+      chip.className='chip warn'; txt.textContent='NOT RATED FOR THIS MATERIAL';
+      msg.innerHTML = 'There are no listed settings for '+MAT[S.mat].label.toLowerCase()+' on the '
+        +MODELNAME[S.model]+'. The panel is holding your last numbers.';
+    } else if(bad.length){
+      chip.className='chip bad'; txt.textContent='OUTSIDE PANEL LIMITS';
+      msg.innerHTML = '<b>'+bad.join(', ')+'</b> '+(bad.length>1?'are':'is')+' outside the range this machine accepts. Fix the setting, or correct the limits in Machine setup if the range is wrong.';
+    } else if(util > 1.001){
+      chip.className='chip bad'; txt.textContent='OVER RATED AVERAGE POWER';
+      msg.innerHTML = fmtW(m.Pav)+' against the <b>'+MODELNAME[S.model]+'</b> rating. Drop to <b>'+m.maxF.toFixed(m.maxF>=10?0:2)+' Hz</b>, or take current or pulse width out of the shot.';
+    } else if(CAP && CAP.why==='avg'){
+      chip.className='chip warn'; txt.textContent='HELD AT THE AVERAGE POWER LIMIT';
+      msg.innerHTML = 'That setting would have taken the machine past <b>'+S.rated+' W</b> average, so '+NICE[CAP.k]
+        +' was held at <b>'+fx(S.v[CAP.k],S.lim[CAP.k].dp)+' '+UNIT[CAP.k]+'</b>. To go further, take something out of the shot — a shorter pulse, less current, or a slower rate.'
+        + '<br><span class="matnote">'+MAT[S.mat].label+' — '+MATNOTE[S.mat]+'</span>';
+    } else if(CAP && CAP.why==='panel'){
+      chip.className='chip warn'; txt.textContent='HELD AT THE PANEL LIMIT';
+      msg.innerHTML = NICE[CAP.k]+' does not go past <b>'+fx(S.v[CAP.k],S.lim[CAP.k].dp)+' '+UNIT[CAP.k]
+        +'</b> on this machine, so it was held there. Change the range under Machine setup if your panel goes further.'
+        + '<br><span class="matnote">'+MAT[S.mat].label+' — '+MATNOTE[S.mat]+'</span>';
+    } else if(util > 0.9){
+      chip.className='chip warn'; txt.textContent='AT RATED AVERAGE POWER';
+      msg.innerHTML = 'Running at '+fmtPct(util)+' of the '+S.rated+' W rating. Every shot still lands '+fmtJ(m.E)+' at '+fmtW(m.Ppk)+' peak — going faster now means giving something up.'
+        + '<br><span class="matnote">'+MAT[S.mat].label+' — '+MATNOTE[S.mat]+'</span>';
+    } else if(m.Ppk <= 0){
+      chip.className='chip warn'; txt.textContent='BELOW THRESHOLD';
+      msg.innerHTML = NICE[drive()].charAt(0).toUpperCase()+NICE[drive()].slice(1)+' is at or under the '+cal().th+' '+UNIT[drive()]+' lasing threshold, so the machine is pumping the lamp and making no beam.';
+    } else {
+      quiet = true;
+    }
+    document.getElementById('statusbar').style.display = quiet ? 'none' : '';
+  }
+
+  // ---------- average-power ceiling ----------
+  var CAP = null;   // {k, why} for the last blocked change
+
+  function Know(){
+    var c=cal();
+    if(drive()==='voltage') return c.E / (S.shape * (c.t/1000) * Math.max(c.I*c.I - c.th*c.th, 1e-9));
+    return c.E / (S.shape * (c.t/1000) * Math.max(c.I - c.th, 1e-9));
+  }
+  function peakNow(){
+    var c=cal(), K=Know();
+    return drive()==='voltage'
+      ? K*Math.max(S.v.voltage*S.v.voltage - c.th*c.th, 0)
+      : K*Math.max(S.v.current - c.th, 0);
+  }
+  function peakAtMax(){
+    var c=cal(), K=Know();
+    return drive()==='voltage'
+      ? K*Math.max(S.lim.voltage.max*S.lim.voltage.max - c.th*c.th, 0)
+      : K*Math.max(S.lim.current.max - c.th, 0);
+  }
+  // largest value of k that still keeps average power at or under the rating
+  function maxForAvg(k){
+    var c=cal(), K=Know(), sh=S.shape, v=S.v, R=S.rated;
+    var Pk = peakNow();
+    if(k==='current'){
+      var d1 = K*sh*(v.pulse/1000)*v.freq;
+      return d1>0 ? c.th + R/d1 : S.lim.current.max;
+    }
+    if(k==='voltage'){
+      var d1b = K*sh*(v.pulse/1000)*v.freq;
+      return d1b>0 ? Math.sqrt(R/d1b + c.th*c.th) : S.lim.voltage.max;
+    }
+    if(k==='pulse'){
+      var d2 = Pk*sh*v.freq;
+      return d2>0 ? (R/d2)*1000 : S.lim.pulse.max;
+    }
+    if(k==='freq'){
+      var d3 = Pk*sh*(v.pulse/1000);
+      return d3>0 ? R/d3 : S.lim.freq.max;
+    }
+    return Infinity;
+  }
+  function floorStep(k, x){
+    var L=S.lim[k];
+    return parseFloat(Math.max(L.min, Math.floor((x+1e-9)/L.step)*L.step).toFixed(4));
+  }
+  // pull the shot back under the rating: rate first, then current
+  function enforceAvg(){
+    if(compute().Pav <= S.rated*1.0005) return null;
+    var nf = floorStep('freq', maxForAvg('freq'));
+    if(nf !== S.v.freq){ S.v.freq = nf; }
+    if(compute().Pav <= S.rated*1.0005) return {k:'freq', why:'avg'};
+    var dk = drive();
+    S.v[dk] = floorStep(dk, maxForAvg(dk));
+    return {k:dk, why:'avg'};
+  }
+
+  // ---------- input plumbing ----------
+  function setVal(k, x){
+    var L=S.lim[k];
+    if(!isFinite(x)) return;
+    x = Math.round(x/L.step)*L.step;
+    var why = null;
+    if(x < L.min){ x = L.min; why = 'panel'; }
+    if(x > L.max){ x = L.max; why = 'panel'; }
+    if(k !== 'spot'){
+      var cap = maxForAvg(k);
+      if(x > cap + 1e-9){ x = floorStep(k, cap); why = 'avg'; }
+    }
+    S.v[k] = parseFloat(x.toFixed(4));
+    CAP = why ? {k:k, why:why} : null;
+    render();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.mbtn'), function(b){
+    b.addEventListener('click', function(){
+      S.model = parseFloat(b.getAttribute('data-model'));
+      S.rated = RATED[S.model];
+      Array.prototype.forEach.call(document.querySelectorAll('.mbtn'), function(o){
+        o.setAttribute('aria-pressed', String(o===b));
+      });
+      if(!MAT[S.mat].rows[chartModel()]) S.mat = 'stainless';
+      buildChassis(); fillSetup(); syncPickers(); renderRec(); applyRec();
+      CAP = enforceAvg(); render();
+    });
+  });
+
+  // setup fields
+  var LIMF=[];
+  ['pulse','current','voltage','freq','spot'].forEach(function(k){
+    ['min','max','step'].forEach(function(f){ LIMF.push(['s-'+k+'-'+f, k, f]); });
+  });
+  function fillSetup(){
+    LIMF.forEach(function(t){ document.getElementById(t[0]).value = S.lim[t[1]][t[2]]; });
+    var c=cal();
+    document.getElementById('c-I').value=c.I;
+    document.getElementById('c-t').value=c.t;
+    document.getElementById('c-E').value=c.E;
+    document.getElementById('c-th').value=c.th;
+    document.getElementById('c-rated').value=S.rated;
+    document.getElementById('c-shape').value=S.shape.toFixed(S.shape>1.02?4:2);
+    document.getElementById('c-spot').value=S.spotProfile;
+    var dr=drive(), un=UNIT[dr], nm=dr==='voltage'?'Voltage setting':'Current setting';
+    document.getElementById('c-I-lbl').textContent = nm+' ('+un+')';
+    document.getElementById('c-th-lbl').textContent = 'Lasing threshold ('+un+')';
+    document.getElementById('row-current').style.display = dr==='current' ? '' : 'none';
+    document.getElementById('row-voltage').style.display = dr==='voltage' ? '' : 'none';
+    Array.prototype.forEach.call(document.querySelectorAll('.mbtn'), function(o){
+      o.setAttribute('aria-pressed', String(parseFloat(o.getAttribute('data-model'))===S.model));
+    });
+  }
+  LIMF.forEach(function(t){
+    document.getElementById(t[0]).addEventListener('change', function(e){
+      var x=parseFloat(e.target.value);
+      if(!isFinite(x)) return;
+      S.lim[t[1]][t[2]] = x;
+      if(t[2]==='step') S.lim[t[1]].dp = (x >= 1) ? 0 : (x >= 0.1 ? 1 : 2);
+      render();
+    });
+  });
+  ['c-I','c-t','c-E','c-th'].forEach(function(id){
+    document.getElementById(id).addEventListener('change', function(e){
+      var x=parseFloat(e.target.value); if(!isFinite(x)) return;
+      cal()[{'c-I':'I','c-t':'t','c-E':'E','c-th':'th'}[id]] = x;
+      S.calibrated = true;
+      render();
+    });
+  });
+  document.getElementById('c-shape').addEventListener('change', function(e){ S.shape=parseFloat(e.target.value); syncPickers(); render(); });
+  document.getElementById('c-rated').addEventListener('change', function(e){
+    var x=parseFloat(e.target.value); if(isFinite(x)){ S.rated=x; CAP=enforceAvg(); render(); }
+  });
+  document.getElementById('save').addEventListener('click', function(){
+    save();
+    var b=document.getElementById('save'); var t=b.textContent;
+    b.textContent='Saved'; setTimeout(function(){ b.textContent=t; }, 1400);
+  });
+  document.getElementById('restore').addEventListener('click', function(){
+    S = JSON.parse(JSON.stringify(DEF));
+    try{ localStorage.removeItem('yagPanel'); }catch(e){}
+    fillSetup(); syncPickers(); renderRec(); render();
+  });
+
+  // ---------- material recommendations ----------
+  function recRow(){
+    var m = MAT[S.mat]; if(!m) return null;
+    return m.rows[chartModel()] || null;
+  }
+  function lerpSnap(k, band, t){
+    var x = band[0] + (band[1]-band[0])*t;
+    var L = S.lim[k];
+    return parseFloat((Math.round(x/L.step)*L.step).toFixed(4));
+  }
+  function recValues(){
+    var r = recRow(); if(!r) return null;
+    var t = SEV[S.sev];
+    var out = { pulse:lerpSnap('pulse',r.pulse,t), freq:lerpSnap('freq',r.freq,t), spot:lerpSnap('spot',r.spot,t) };
+    var amps = r.current[0] + (r.current[1]-r.current[0])*t;
+    if(isP()){
+      // match the energy that current would make on the 200B curve, then invert this machine's V^2 curve
+      var cB = S.cals[200], cP = cal();
+      var KB = cB.E / (S.shape * (cB.t/1000) * Math.max(cB.I - cB.th, 1e-9));
+      var KP = cP.E / (S.shape * (cP.t/1000) * Math.max(cP.I*cP.I - cP.th*cP.th, 1e-9));
+      var Ptarget = KB * Math.max(amps - cB.th, 0);
+      var V = Math.sqrt(Math.max(Ptarget/KP, 0) + cP.th*cP.th);
+      out.voltage = Math.max(S.lim.voltage.min, Math.min(S.lim.voltage.max,
+                      parseFloat((Math.round(V/S.lim.voltage.step)*S.lim.voltage.step).toFixed(4))));
+    } else {
+      out.current = lerpSnap('current', r.current, t);
+    }
+    return out;
+  }
+  function band(k, r){
+    var dp = S.lim[k].dp;
+    return r[k][0]===r[k][1] ? fx(r[k][0],dp) : fx(r[k][0],dp)+'–'+fx(r[k][1],dp);
+  }
+  function renderRec(){
+    var r = recRow(), tag = document.getElementById('srcTag');
+    if(!r){
+      tag.textContent = 'not rated on this machine';
+      tag.style.color = 'var(--bad)';
+      return;
+    }
+    tag.style.color = '';
+    var bits = [];
+    if(MAT[S.mat].src !== 'chart') bits.push('derived — test on scrap');
+    if(S.model === 230 || S.model === 200.5) bits.push('uses 200B settings');
+    tag.textContent = bits.join(' · ');
+  }
+  function applyRec(){
+    var v = recValues(); if(!v) return;
+    S.v.pulse=v.pulse; S.v.freq=v.freq; S.v.spot=v.spot;
+    if(v.current !== undefined) S.v.current=v.current;
+    if(v.voltage !== undefined) S.v.voltage=v.voltage;
+    CAP = enforceAvg();
+    render();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#matPick .pick'), function(b){
+    b.addEventListener('click', function(){
+      S.mat = b.getAttribute('data-mat');
+      Array.prototype.forEach.call(document.querySelectorAll('#matPick .pick'), function(o){
+        o.setAttribute('aria-pressed', String(o===b)); });
+      renderRec(); applyRec();
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#sevPick .pick'), function(b){
+    b.addEventListener('click', function(){
+      S.sev = b.getAttribute('data-sev');
+      Array.prototype.forEach.call(document.querySelectorAll('#sevPick .pick'), function(o){
+        o.setAttribute('aria-pressed', String(o===b)); });
+      renderRec(); applyRec();
+    });
+  });
+
+  document.getElementById('c-spot').addEventListener('change', function(e){
+    S.spotProfile = e.target.value; render();
+  });
+
+  function syncPickers(){
+    Array.prototype.forEach.call(document.querySelectorAll('#matPick .pick'), function(o){
+      o.setAttribute('aria-pressed', String(o.getAttribute('data-mat')===S.mat));
+      var r = MAT[o.getAttribute('data-mat')].rows[chartModel()];
+      o.disabled = !r;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#sevPick .pick'), function(o){
+      o.setAttribute('aria-pressed', String(o.getAttribute('data-sev')===S.sev)); });
+
+  }
+
+  // ---------- material reference list ----------
+  (function(){
+    var el = document.getElementById('matList'), h='', k;
+    for(k in MAT){ if(MAT.hasOwnProperty(k)){
+      h += '<div><dt>'+MAT[k].label+'</dt><dd>'+MATNOTE[k]+'</dd></div>';
+    }}
+    el.innerHTML = h;
+  })();
+
+  // ---------- reference table ----------
+  (function(){
+    var tb = document.querySelector('#refTab tbody'), h='';
+    REF.forEach(function(r){
+      h += '<tr><td>'+r[0]+'</td><td>'+r[1].toFixed(1)+' kW</td><td>'+r[2]+' mm/s</td><td>'+r[3].toFixed(2)+' kW/mm²</td>'
+         + '<td>'+r[4]+' s</td><td>'+r[5]+' J</td><td>'+(r[6]===null?'—':r[6]+' µm')+'</td><td>'+(r[7]===null?'—':r[7]+' µm')+'</td></tr>';
+    });
+    tb.innerHTML = h;
+  })();
+
+  load(); buildChassis(); fillSetup(); syncPickers(); renderRec(); render();
+})();
+</script>
+
+</body>
+</html>

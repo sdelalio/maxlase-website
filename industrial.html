@@ -16,24 +16,27 @@
 <header class="site-header">
   <div class="nav-wrap">
     <a class="brand" href="/index.html">
-      <img src="/assets/logos/maxlase-logo-transparent.png" alt="MaxLase" />
+      <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
       <span class="brand-tag">Offered exclusively by Weld Solutions</span>
     </a>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
     <nav class="main-nav" id="mainNav">
       <ul>
-        <li><a href="/shop.html">Shop</a></li>
-        <li><a href="/jewelers.html">For Jewelers</a></li>
-        <li><a href="/industrial.html">For Industrial</a></li>
-        <li><a href="/technology.html">Technology</a></li>
-        <li><a href="/support.html">Support &amp; Training</a></li>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/contact.html">Contact</a></li>
+        <li class="has-dropdown">
+          <a href="/shop.html">Laser Systems</a>
+          <ul class="dropdown">
+            <li><a href="/systems/benchtop.html">Benchtop</a></li>
+            <li><a href="/systems/pedestal.html">Pedestal</a></li>
+            <li><a href="/systems/cnc.html">CNC</a></li>
+          </ul>
+        </li>
+        <li><a href="/accessories.html">Accessories</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+        <li><a href="/contact.html">Contact Us</a></li>
       </ul>
     </nav>
     <div class="nav-cta">
-      <a class="btn btn-outline btn-sm" href="/contact.html">Talk to an Engineer</a>
-      <a class="btn btn-primary btn-sm" href="/shop.html">Shop Systems</a>
+      <a class="btn btn-primary btn-sm" href="/order.html">Buy Online</a>
     </div>
   </div>
 </header>
@@ -43,12 +46,13 @@
   <div class="container hero-grid">
     <div>
       <span class="eyebrow">For Industrial</span>
-      <h1>Precision welding for parts too small for a big rig.</h1>
+      <h1>Spot, tack, and seam welding with precision.</h1>
       <p class="lead">Sensor housings, battery tabs, thermocouples, small enclosures, medical device components — MaxLase systems deliver controlled, low-heat-input welds with penetration up to 2mm, sized right for parts where a high-power industrial laser is overkill.</p>
       <div class="hero-cta">
         <a href="/shop.html" class="btn btn-primary">See Industrial-Ready Systems</a>
         <a href="/contact.html" class="btn btn-outline">Request an Engineering Consult</a>
       </div>
+      <p style="margin-top:14px;"><a href="/selector.html" style="color:var(--amber-500);text-decoration:underline;font-size:14.5px;">Not sure which system fits? Take our 1-minute system finder &rarr;</a></p>
     </div>
     <div class="hero-art">
       <img src="/assets/images/rotary-side-view.jpg" alt="MaxLase system with rotary fixture for industrial parts" />
@@ -59,7 +63,7 @@
 <section>
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Why sub-1000W Nd:YAG</span>
+      <span class="eyebrow">Why small, powerful Nd:YAG</span>
       <h2>Right-sized power for small, precise parts.</h2>
     </div>
     <div class="feature-grid">
@@ -102,20 +106,10 @@
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">Recommended for industrial</span>
-      <h2>Scale power and platform to your production volume</h2>
-      <p class="lead" style="margin:0 auto;">Bench-top systems (100–230X) suit R&amp;D, prototyping, and lower-volume production. The 200P pedestal platform is built for sustained, higher-volume production runs.</p>
+      <h2>Built for sustained production</h2>
+      <p class="lead" style="margin:0 auto;">The 200P pedestal platform is built for sustained, higher-volume production runs.</p>
     </div>
-    <div class="product-grid">
-      <div class="product-card">
-        <div class="thumb"><img src="/assets/images/maxlase-230x-dims.jpg" alt="MaxLase 230X" /></div>
-        <div class="body">
-          <span class="watt">230W &middot; Bench-top</span>
-          <h3>MaxLase 230X</h3>
-          <p class="specs">Highest-power bench-top system for demanding small-parts work.</p>
-          <p class="price">From $14,500</p>
-          <a href="/products/maxlase-230x.html" class="btn btn-outline-dark btn-block">View system</a>
-        </div>
-      </div>
+    <div class="product-grid" style="max-width:420px;margin:0 auto;">
       <div class="product-card">
         <div class="thumb"><img src="/assets/images/maxlase-200p-blue.jpg" alt="MaxLase 200P" /></div>
         <div class="body">
@@ -126,19 +120,66 @@
           <a href="/products/maxlase-200p.html" class="btn btn-outline-dark btn-block">View system</a>
         </div>
       </div>
-      <div class="product-card">
-        <div class="thumb"><img src="/assets/images/maxlase-200-sideview.jpg" alt="MaxLase 200" /></div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-off">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Need something else?</span>
+      <h2>CNC control? Higher power? Larger parts? Engineered to your specifications?</h2>
+      <p class="lead" style="margin:0 auto;">Let us provide you with the exact system to suit your needs. If what we offer here isn't perfect for your application, contact us and we'll find the system that is.</p>
+    </div>
+    <div class="custom-system-grid">
+      <div class="custom-system-card">
+        <img src="/assets/images/maxlase-xyz-500w-production.jpg" alt="MaxLase multi-axis CNC production laser welding system" />
         <div class="body">
-          <span class="watt">200W &middot; Bench-top</span>
-          <h3>MaxLase 200</h3>
-          <p class="specs">Versatile system for R&amp;D and lower-volume production.</p>
-          <p class="price">From $13,500</p>
-          <a href="/products/maxlase-200.html" class="btn btn-outline-dark btn-block">View system</a>
+          <h3>Multi-Axis CNC Production Systems</h3>
+          <p>Up to 500W, XYZ gantry motion with rotary — programmable, repeatable welds for high-volume production and larger or more complex parts.</p>
+          <ul class="feature-list">
+            <li>CNC-controlled XYZ motion, programmable weld paths</li>
+            <li>Rotary axis for cylindrical and ring-style parts</li>
+            <li>Up to 500W average power</li>
+            <li>Built for continuous, high-volume production runs</li>
+            <li>Engineered and configured to your part and process</li>
+          </ul>
+          <a href="/contact.html" class="btn btn-primary">Talk to an Engineer</a>
+        </div>
+      </div>
+      <div class="custom-system-card">
+        <img src="/assets/images/maxlase-230b-hero.jpg" alt="MaxLase 230B laser welding system" />
+        <div class="body">
+          <h3>MaxLase 230B</h3>
+          <p>Our highest-power bench-top system, available by inquiry with these full features:</p>
+          <ul class="feature-list">
+            <li>230W average laser power &middot; 180J max pulse energy</li>
+            <li>Pulse width 0.1&ndash;10ms &middot; 0&ndash;15Hz frequency</li>
+            <li>Spot / weld size 0.2&ndash;3.0mm</li>
+            <li>Built-in water chiller &middot; 4kVA transformer included</li>
+            <li>D69 tilt-rotary &amp; X-Y table compatible</li>
+            <li>43kg (95 lb) bench-top footprint</li>
+            <li>1-year parts &amp; labor &middot; 24-hour repair-or-replace</li>
+          </ul>
+          <a href="/products/maxlase-230b.html" class="btn btn-outline-dark">View Full Specs</a>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .custom-system-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+  @media(max-width:900px){.custom-system-grid{grid-template-columns:1fr;}}
+  .custom-system-card{background:var(--white);border:1px solid #e6e8ec;border-radius:var(--radius-md);overflow:hidden;display:flex;flex-direction:column;}
+  .custom-system-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+  .custom-system-card .body{padding:26px;display:flex;flex-direction:column;flex:1;}
+  .custom-system-card h3{font-size:20px;margin-bottom:8px;}
+  .custom-system-card .feature-list{margin:14px 0 20px;padding:0;list-style:none;}
+  .custom-system-card .feature-list li{font-size:14px;color:var(--slate-400);padding-left:18px;position:relative;margin-bottom:8px;}
+  .custom-system-card .feature-list li::before{content:"\2713";position:absolute;left:0;color:var(--amber-500);font-weight:700;}
+  .custom-system-card .body .btn{margin-top:auto;align-self:flex-start;}
+</style>
 
 <section class="bg-off">
   <div class="container two-col">
@@ -169,22 +210,21 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand">
-          <img src="/assets/logos/maxlase-logo-transparent.png" alt="MaxLase" />
+          <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
         </div>
-        <p>Below-1000W Nd:YAG laser welders for jewelry bench work and small industrial parts — spot welding, tacking, and seam penetration up to 2mm. Sourced overseas, inspected, serviced, and supported entirely in the USA.</p>
+        <p>Small, powerful Nd:YAG laser welders for jewelry bench work and small industrial parts — spot welding, tacking, and seam penetration up to 2mm on even your most demanding metals. Sourced overseas, inspected, serviced, and supported entirely in the USA.</p>
         <div class="ws-badge">
           <img src="/assets/logos/weld-solutions-logo.png" alt="Weld Solutions" />
           <span>Offered exclusively by Weld Solutions</span>
         </div>
       </div>
       <div>
-        <h5>Shop</h5>
+        <h5>Laser Systems</h5>
         <ul>
-          <li><a href="/products/maxlase-100.html">MaxLase 100</a></li>
-          <li><a href="/products/maxlase-150.html">MaxLase 150</a></li>
-          <li><a href="/products/maxlase-200.html">MaxLase 200</a></li>
-          <li><a href="/products/maxlase-230x.html">MaxLase 230X</a></li>
-          <li><a href="/products/maxlase-200p.html">MaxLase 200P</a></li>
+          <li><a href="/systems/benchtop.html">Benchtop</a></li>
+          <li><a href="/systems/pedestal.html">Pedestal</a></li>
+          <li><a href="/systems/cnc.html">CNC</a></li>
+          <li><a href="/accessories.html">Accessories</a></li>
         </ul>
       </div>
       <div>
@@ -192,16 +232,17 @@
         <ul>
           <li><a href="/jewelers.html">For Jewelers</a></li>
           <li><a href="/industrial.html">For Industrial</a></li>
+          <li><a href="/selector.html">Find Your System</a></li>
           <li><a href="/technology.html">Technology</a></li>
           <li><a href="/about.html">About</a></li>
-          <li><a href="/videos.html">Videos</a></li>
+          <li><a href="/resources.html">Resources</a></li>
         </ul>
       </div>
       <div>
         <h5>Support</h5>
         <ul>
-          <li><a href="/support.html">Support &amp; Training</a></li>
-          <li><a href="/contact.html">Request a Quote</a></li>
+          <li><a href="/order.html">Buy Online</a></li>
+          <li><a href="/contact.html">Contact Us</a></li>
           <li><a href="mailto:info@maxlase.com">info@maxlase.com</a></li>
           <li><a href="tel:+19125551234">Call Us</a></li>
         </ul>
@@ -209,7 +250,7 @@
     </div>
     <div class="footer-bottom">
       <span>&copy; <span id="year"></span> MaxLase. A Weld Solutions company.</span>
-      <span>Savannah, GA &middot; Sales, service &amp; training based in the USA</span>
+      <span>West Palm Beach, FL &middot; Sales, service &amp; training based in the USA</span>
     </div>
   </div>
 </footer>

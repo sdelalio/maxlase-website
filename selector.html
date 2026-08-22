@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Find Your MaxLase System — Laser Welder Selector</title>
+<meta name="description" content="Answer a few questions about your application — materials, penetration, duty cycle, rotary and downtime needs — and we'll recommend the right MaxLase laser welder for your bench or floor." />
+<link rel="icon" href="/assets/logos/maxlase-logo-cropped.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  .wiz-wrap{max-width:760px;margin:0 auto;}
+  .wiz-progress{display:flex;gap:6px;margin-bottom:32px;}
+  .wiz-progress span{height:5px;flex:1;border-radius:3px;background:#e6e8ec;}
+  .wiz-progress span.done{background:var(--amber-500);}
+  .wiz-progress span.current{background:var(--navy-700);}
+  .wiz-step{display:none;}
+  .wiz-step.active{display:block;animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .wiz-q{font-size:22px;font-weight:700;color:var(--navy-950);margin-bottom:6px;}
+  .wiz-sub{font-size:14.5px;color:var(--slate-400);margin-bottom:24px;}
+  .choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:8px;}
+  .choice{
+    border:2px solid #e6e8ec;border-radius:var(--radius-md);padding:16px 18px;cursor:pointer;
+    font-size:14.5px;font-weight:600;color:var(--navy-700);background:var(--white);
+    transition:border-color .15s, background .15s;user-select:none;
+  }
+  .choice:hover{border-color:var(--slate-400);}
+  .choice.selected{border-color:var(--amber-500);background:var(--amber-050);color:var(--navy-950);}
+  .choice .desc{display:block;font-weight:400;font-size:12.5px;color:var(--slate-400);margin-top:4px;}
+  .wiz-actions{display:flex;justify-content:space-between;align-items:center;margin-top:32px;gap:12px;}
+  .wiz-skip{background:none;border:none;color:var(--slate-400);font-size:13.5px;text-decoration:underline;cursor:pointer;padding:10px 0;}
+  .zip-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-top:8px;}
+  .zip-row input{max-width:160px;}
+  #wizResults{display:none;}
+  .result-card{border:1px solid #e6e8ec;border-radius:var(--radius-lg);padding:32px;background:var(--white);}
+  .result-head{display:flex;gap:24px;flex-wrap:wrap;align-items:center;margin-bottom:24px;}
+  .result-head img{width:180px;border-radius:var(--radius-md);}
+  .why-list li{margin-bottom:8px;font-size:14.5px;}
+  .addon-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #e6e8ec;font-size:14.5px;}
+  .addon-row:last-child{border-bottom:none;}
+  .ship-box{background:var(--off-white);border-radius:var(--radius-md);padding:18px 20px;margin-top:20px;}
+  .result-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;}
+  @media print{
+    header.site-header, footer.site-footer, .page-hero, #wizForm, .no-print{display:none !important;}
+    #wizResults{display:block !important;}
+    body{color:#000;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="/index.html">
+      <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
+      <span class="brand-tag">Offered exclusively by Weld Solutions</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li class="has-dropdown">
+          <a href="/shop.html">Laser Systems</a>
+          <ul class="dropdown">
+            <li><a href="/systems/benchtop.html">Benchtop</a></li>
+            <li><a href="/systems/pedestal.html">Pedestal</a></li>
+            <li><a href="/systems/cnc.html">CNC</a></li>
+          </ul>
+        </li>
+        <li><a href="/accessories.html">Accessories</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+        <li><a href="/contact.html">Contact Us</a></li>
+      </ul>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary btn-sm" href="/order.html">Buy Online</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero no-print">
+  <div class="container">
+    <div class="breadcrumb"><a href="/index.html">Home</a> / Find Your System</div>
+    <span class="eyebrow">System Selector</span>
+    <h1>Not sure which MaxLase fits? Answer a few questions.</h1>
+    <p class="lead">Tell us about your application — materials, penetration, duty cycle, and how much downtime you can tolerate — and we'll recommend the right system, accessories, and support plan. Takes about a minute.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container wiz-wrap">
+
+    <form id="wizForm">
+      <div class="wiz-progress" id="wizProgress"></div>
+
+      <!-- Step 1: Industry -->
+      <div class="wiz-step active" data-step="0">
+        <div class="wiz-q">What best describes your work?</div>
+        <div class="wiz-sub">This helps us weigh the rest of your answers.</div>
+        <div class="choice-grid" data-field="industry" data-required="1">
+          <div class="choice" data-value="jeweler">Jeweler / bench work<span class="desc">Ring sizing, prong retipping, chain repair, fabrication</span></div>
+          <div class="choice" data-value="industrial">Industrial / small parts<span class="desc">Sensor housings, battery tabs, thermocouples, enclosures</span></div>
+          <div class="choice" data-value="both">Both<span class="desc">Jewelry bench work and light industrial repair</span></div>
+        </div>
+      </div>
+
+      <!-- Step 2: Materials -->
+      <div class="wiz-step" data-step="1">
+        <div class="wiz-q">What materials will you be welding?</div>
+        <div class="wiz-sub">Select all that apply.</div>
+        <div class="choice-grid" data-field="materials" data-multi="1" data-required="1">
+          <div class="choice" data-value="14k">14K Gold</div>
+          <div class="choice" data-value="18k">18K Gold</div>
+          <div class="choice" data-value="22k">22K Gold</div>
+          <div class="choice" data-value="puregold">Pure / 24K Gold</div>
+          <div class="choice" data-value="silver">925 Silver</div>
+          <div class="choice" data-value="platinum">Platinum</div>
+          <div class="choice" data-value="stainless">Stainless Steel</div>
+          <div class="choice" data-value="aluminum">Aluminum</div>
+          <div class="choice" data-value="copper">Copper</div>
+          <div class="choice" data-value="other">Other / not sure</div>
+        </div>
+      </div>
+
+      <!-- Step 3: Penetration -->
+      <div class="wiz-step" data-step="2">
+        <div class="wiz-q">How much weld penetration do you need?</div>
+        <div class="wiz-sub">This is just for context — actual penetration depends on material and purity, so we key the recommendation off the materials you picked, not a target depth. Final settings always get confirmed on scrap.</div>
+        <div class="choice-grid" data-field="penetration" data-required="1">
+          <div class="choice" data-value="light">Under 0.5mm<span class="desc">Fine detail, thin-gauge findings</span></div>
+          <div class="choice" data-value="medium">0.5–1mm<span class="desc">Typical prong and chain repair</span></div>
+          <div class="choice" data-value="deep">1–2mm<span class="desc">Heavier-gauge repair, small structural tacks</span></div>
+          <div class="choice" data-value="max">Up to 2mm (max)<span class="desc">Your most demanding metals</span></div>
+          <div class="choice" data-value="unknown">Not sure yet</div>
+        </div>
+      </div>
+
+      <!-- Step 4: Duty cycle -->
+      <div class="wiz-step" data-step="3">
+        <div class="wiz-q">How often will the machine be welding?</div>
+        <div class="wiz-sub">Duty cycle — the share of a work shift the laser is actually firing.</div>
+        <div class="choice-grid" data-field="dutyCycle" data-required="1">
+          <div class="choice" data-value="10">~10%<span class="desc">Occasional repairs</span></div>
+          <div class="choice" data-value="25">~25%<span class="desc">Regular bench use</span></div>
+          <div class="choice" data-value="50">~50%<span class="desc">Busy shop or floor</span></div>
+          <div class="choice" data-value="75">~75%<span class="desc">Near-continuous production</span></div>
+          <div class="choice" data-value="247">24/7<span class="desc">Sustained production run</span></div>
+        </div>
+      </div>
+
+      <!-- Step 5: Rotary -->
+      <div class="wiz-step" data-step="4">
+        <div class="wiz-q">Do you need rotary work?</div>
+        <div class="wiz-sub">Rotary fixtures hold rings and cylindrical parts for even, rotated welds.</div>
+        <div class="choice-grid" data-field="rotary" data-required="1">
+          <div class="choice" data-value="yes">Yes</div>
+          <div class="choice" data-value="no">No</div>
+          <div class="choice" data-value="unsure">Not sure</div>
+        </div>
+      </div>
+
+      <!-- Step 6: Linear / X-Y table -->
+      <div class="wiz-step" data-step="5">
+        <div class="wiz-q">Do you need linear or seam welding?</div>
+        <div class="wiz-sub">Flat or irregular parts positioned on an X-Y table, or continuous seam runs.</div>
+        <div class="choice-grid" data-field="linear" data-required="1">
+          <div class="choice" data-value="yes">Yes</div>
+          <div class="choice" data-value="no">No</div>
+          <div class="choice" data-value="unsure">Not sure</div>
+        </div>
+      </div>
+
+      <!-- Step 7: Training -->
+      <div class="wiz-step" data-step="6">
+        <div class="wiz-q">Will you need training and installation?</div>
+        <div class="wiz-sub">Every system includes onboarding support — this just tells us how to size it.</div>
+        <div class="choice-grid" data-field="training" data-required="1">
+          <div class="choice" data-value="onsite">Yes, on-site<span class="desc">Hands-on at your shop or floor</span></div>
+          <div class="choice" data-value="virtual">Yes, virtual<span class="desc">Live video walkthrough</span></div>
+          <div class="choice" data-value="none">No, we're experienced</div>
+        </div>
+      </div>
+
+      <!-- Step 8: Downtime tolerance -->
+      <div class="wiz-step" data-step="7">
+        <div class="wiz-q">If the machine went down, how much downtime could you tolerate?</div>
+        <div class="wiz-sub">This determines whether we'd recommend our 24-hour repair-or-replace plan.</div>
+        <div class="choice-grid" data-field="downtime" data-required="1">
+          <div class="choice" data-value="24h">24 hours<span class="desc">Can't afford to be down at all</span></div>
+          <div class="choice" data-value="72h">72 hours</div>
+          <div class="choice" data-value="1week">About a week</div>
+          <div class="choice" data-value="none">Not time-critical</div>
+        </div>
+      </div>
+
+      <!-- Step 9: Power supply -->
+      <div class="wiz-step" data-step="8">
+        <div class="wiz-q">What power supply will it run on?</div>
+        <div class="wiz-sub">Every MaxLase system ships with its step-up transformer included, so either works — this just tells us what amperage to flag for your electrician.</div>
+        <div class="choice-grid" data-field="voltage" data-required="1">
+          <div class="choice" data-value="110">110V<span class="desc">Standard shop outlet</span></div>
+          <div class="choice" data-value="220">220V<span class="desc">Dedicated circuit</span></div>
+          <div class="choice" data-value="unsure">Not sure yet</div>
+        </div>
+      </div>
+
+      <!-- Step 10: ZIP for shipping -->
+      <div class="wiz-step" data-step="9">
+        <div class="wiz-q">Last one — where would this ship?</div>
+        <div class="wiz-sub">Optional, but we'll estimate freight from our West Palm Beach, FL facility to your ZIP code.</div>
+        <div class="zip-row">
+          <div>
+            <label for="wizZip">ZIP code</label>
+            <input type="text" id="wizZip" inputmode="numeric" maxlength="10" placeholder="e.g. 30301" />
+          </div>
+        </div>
+        <button type="button" class="wiz-skip" id="wizSkipZip">Skip this — I don't have a ZIP yet</button>
+      </div>
+
+      <div class="wiz-actions no-print">
+        <button type="button" class="btn btn-outline-dark" id="wizBack" style="visibility:hidden;">Back</button>
+        <button type="button" class="btn btn-primary" id="wizNext">Continue</button>
+      </div>
+    </form>
+
+    <!-- Results -->
+    <div id="wizResults">
+      <div class="section-head left" style="margin-bottom:20px;">
+        <span class="eyebrow">Your recommendation</span>
+        <h2 id="resHeadline">Based on your answers</h2>
+      </div>
+
+      <div class="result-card">
+        <div class="result-head">
+          <img id="resImg" src="/assets/images/maxlase-pro-hero.jpg" alt="" />
+          <div>
+            <span class="watt" id="resTagline">Most Popular</span>
+            <h3 id="resName" style="margin:6px 0;">MaxLase 100B</h3>
+            <p id="resFit" style="color:var(--slate-400);margin:0;">Best fit summary</p>
+            <p id="resPrice" style="font-weight:800;color:var(--navy-900);margin:6px 0 0;display:none;"></p>
+          </div>
+        </div>
+
+        <h4>Why this system</h4>
+        <ul class="why-list" id="resWhy"></ul>
+
+        <h4 style="margin-top:24px;">Recommended add-ons</h4>
+        <div id="resAddons"></div>
+
+        <div class="ship-box" id="resPower">
+          <strong>Power requirements:</strong> <span id="resPowerText"></span>
+        </div>
+
+        <div class="ship-box" id="resShip" style="display:none;margin-top:12px;">
+          <strong>Estimated shipping:</strong> <span id="resShipText"></span>
+        </div>
+
+        <p style="font-size:13px;color:var(--slate-400);margin-top:20px;">This is a starting recommendation based on your answers — actual weld penetration varies by material, thickness, and purity. We'll always confirm final settings on scrap before running a production part.</p>
+
+        <div class="result-ctas no-print">
+          <a class="btn btn-primary" id="resBuyBtn" href="#" target="_blank" rel="noopener">Buy Online</a>
+          <a class="btn btn-outline-dark" id="resViewBtn" href="#">View Full Specs</a>
+          <button type="button" class="btn btn-outline-dark" onclick="window.print()">Print / Save as PDF</button>
+        </div>
+      </div>
+
+      <div class="result-card no-print" style="margin-top:24px;">
+        <h4 style="margin-top:0;">Email me this recommendation</h4>
+        <p style="font-size:14.5px;color:var(--slate-400);">We'll send a full spec-sheet PDF and follow up within one business day.</p>
+        <form name="system-selector" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="emailForm">
+          <input type="hidden" name="form-name" value="system-selector" />
+          <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
+          <input type="hidden" name="recommendation" id="hidRecommendation" />
+          <input type="hidden" name="answers" id="hidAnswers" />
+          <div class="form-grid">
+            <div>
+              <label for="emName">Full name</label>
+              <input type="text" id="emName" name="name" required />
+            </div>
+            <div>
+              <label for="emEmail">Email</label>
+              <input type="email" id="emEmail" name="email" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:16px;">Send My Recommendation</button>
+        </form>
+        <p id="emailSent" style="display:none;color:var(--jewel-600, #7a5a1e);font-weight:600;">Thanks — check your inbox shortly.</p>
+      </div>
+
+      <div class="wiz-actions no-print">
+        <button type="button" class="btn btn-outline-dark" id="wizRestart">Start Over</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
+        </div>
+        <p>Small, powerful Nd:YAG laser welders for jewelry bench work and small industrial parts — spot welding, tacking, and seam penetration up to 2mm on even your most demanding metals. Sourced overseas, inspected, serviced, and supported entirely in the USA.</p>
+        <div class="ws-badge">
+          <img src="/assets/logos/weld-solutions-logo.png" alt="Weld Solutions" />
+          <span>Offered exclusively by Weld Solutions</span>
+        </div>
+      </div>
+      <div>
+        <h5>Laser Systems</h5>
+        <ul>
+          <li><a href="/systems/benchtop.html">Benchtop</a></li>
+          <li><a href="/systems/pedestal.html">Pedestal</a></li>
+          <li><a href="/systems/cnc.html">CNC</a></li>
+          <li><a href="/accessories.html">Accessories</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/jewelers.html">For Jewelers</a></li>
+          <li><a href="/industrial.html">For Industrial</a></li>
+          <li><a href="/selector.html">Find Your System</a></li>
+          <li><a href="/technology.html">Technology</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/resources.html">Resources</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Support</h5>
+        <ul>
+          <li><a href="/order.html">Buy Online</a></li>
+          <li><a href="/contact.html">Contact Us</a></li>
+          <li><a href="mailto:info@maxlase.com">info@maxlase.com</a></li>
+          <li><a href="tel:+19125551234">Call Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> MaxLase. A Weld Solutions company.</span>
+      <span>West Palm Beach, FL &middot; Sales, service &amp; training based in the USA</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/shipping-data.js"></script>
+<script src="/js/main.js"></script>
+<script>
+(function(){
+  const STEPS = 10;
+  let current = 0;
+  const answers = { industry:null, materials:[], penetration:null, dutyCycle:null, rotary:null, linear:null, training:null, downtime:null, voltage:null, zip:null };
+
+  const progressEl = document.getElementById('wizProgress');
+  for(let i=0;i<STEPS;i++){ const s=document.createElement('span'); progressEl.appendChild(s); }
+
+  function updateProgress(){
+    Array.from(progressEl.children).forEach((el,i)=>{
+      el.classList.toggle('done', i<current);
+      el.classList.toggle('current', i===current);
+    });
+  }
+
+  function showStep(i){
+    document.querySelectorAll('.wiz-step').forEach(el=>{
+      el.classList.toggle('active', Number(el.dataset.step)===i);
+    });
+    document.getElementById('wizBack').style.visibility = i===0 ? 'hidden' : 'visible';
+    document.getElementById('wizNext').textContent = i===STEPS-1 ? 'See My Recommendation' : 'Continue';
+    updateProgress();
+  }
+
+  // click handling for choice tiles
+  document.querySelectorAll('.choice-grid').forEach(grid=>{
+    const field = grid.dataset.field, multi = grid.dataset.multi === '1';
+    grid.addEventListener('click', e=>{
+      const tile = e.target.closest('.choice');
+      if(!tile) return;
+      const val = tile.dataset.value;
+      if(multi){
+        tile.classList.toggle('selected');
+        const idx = answers[field].indexOf(val);
+        if(tile.classList.contains('selected') && idx===-1) answers[field].push(val);
+        if(!tile.classList.contains('selected') && idx!==-1) answers[field].splice(idx,1);
+      } else {
+        Array.from(grid.children).forEach(c=>c.classList.remove('selected'));
+        tile.classList.add('selected');
+        answers[field] = val;
+      }
+    });
+  });
+
+  function currentStepValid(){
+    const stepEl = document.querySelector('.wiz-step[data-step="'+current+'"]');
+    const grid = stepEl.querySelector('.choice-grid');
+    if(current === STEPS-1) return true; // zip step, optional
+    if(!grid) return true;
+    const field = grid.dataset.field, multi = grid.dataset.multi==='1';
+    if(!grid.dataset.required) return true;
+    return multi ? answers[field].length>0 : !!answers[field];
+  }
+
+  document.getElementById('wizNext').addEventListener('click', ()=>{
+    if(!currentStepValid()){
+      alert('Pick at least one option to continue.');
+      return;
+    }
+    if(current === STEPS-1){
+      answers.zip = document.getElementById('wizZip').value.trim();
+      finish();
+      return;
+    }
+    current++;
+    showStep(current);
+  });
+
+  document.getElementById('wizBack').addEventListener('click', ()=>{
+    if(current===0) return;
+    current--;
+    showStep(current);
+  });
+
+  document.getElementById('wizSkipZip').addEventListener('click', ()=>{
+    document.getElementById('wizZip').value = '';
+    answers.zip = '';
+    finish();
+  });
+
+  document.getElementById('wizRestart').addEventListener('click', ()=>{
+    location.reload();
+  });
+
+  // ---- Recommendation engine ----
+  const SYSTEMS = {
+    '100':  { name:'MaxLase 100B',  tagline:'Most Popular',            fit:'All gold / silver — everyday bench work', url:'/products/maxlase-100b.html',  img:'/assets/images/maxlase-pro-hero.jpg', amps220:14, wire:'2.5mm²', price:9500 },
+    '150':  { name:'MaxLase 150B',  tagline:'More Than Enough',        fit:'Deeper penetration on heavier-gauge repair', url:'/products/maxlase-150b.html', img:'/assets/images/maxlase-pro-hero.jpg', amps220:18, wire:'2.5mm²', price:9500 },
+    '200':  { name:'MaxLase 200B',  tagline:'For Most Demanding Power', fit:'Most demanding power in the bench-top range', url:'/products/maxlase-200b.html', img:'/assets/images/maxlase-pro-hero.jpg', amps220:18, wire:'2.5mm²', price:9500 },
+    '230b': { name:'MaxLase 230B', tagline:'Max Power. Minimum Price Tag.', fit:'Highest-power bench-top system', url:'/products/maxlase-230b.html', img:'/assets/images/maxlase-230b-hero.jpg', amps220:18, wire:'2.5mm²', price:9500 },
+    '200p': { name:'MaxLase 200P', tagline:'Pedestal Platform',        fit:'Floor-standing, production-ready platform', url:'/products/maxlase-200p.html', img:'/assets/images/maxlase-200p-context.jpg', amps220:32, wire:'4mm²', price:14500 }
+  };
+
+  function recommend(a){
+    const why = [];
+    let modelKey;
+    const has = v => a.materials.includes(v);
+
+    // Materials-driven tiering, per Ruisheng's engineering guidance (not a published depth spec —
+    // actual results vary by material and purity, so we key off the materials themselves):
+    //   Tier A (100W): 14K / 18K gold only
+    //   Tier B (150W): 18K gold + 925 silver
+    //   Tier C (200 / 230B / 200P): 22K or pure/24K gold, stainless steel, platinum, aluminum, or copper
+    const demanding = has('22k') || has('puregold') || has('stainless') || has('platinum') || has('aluminum') || has('copper');
+    let tier;
+    if(demanding) tier = 'C';
+    else if(has('18k') && has('silver')) tier = 'B';
+    else if(a.materials.length>0 && a.materials.every(m => m==='14k' || m==='18k')) tier = 'A';
+    else tier = 'B'; // ambiguous mix (e.g. silver alone, "other") — default to the safer middle tier
+
+    const highVolume = (a.dutyCycle==='75' || a.dutyCycle==='247');
+    const wantsProduction = (a.industry==='industrial' || a.industry==='both') && highVolume && (a.linear==='yes' || a.rotary==='yes');
+
+    if(wantsProduction){
+      modelKey = '200p';
+      why.push('Industrial application at ' + (a.dutyCycle==='247' ? '24/7' : '75%+') + ' duty cycle points to a production-ready, floor-standing platform rather than a bench-top unit.');
+      if(a.linear==='yes') why.push('You need linear/seam work — the 200P\'s motorized work table is built for automatic seam runs.');
+      if(a.rotary==='yes') why.push('Rotary work at production volume is best served by the 200P\'s larger D80 rotary capacity.');
+    } else if(tier==='A'){
+      modelKey = '100';
+      why.push('You\'re welding 14K and/or 18K gold — well within the MaxLase 100B\'s range, our most popular everyday system.');
+    } else if(tier==='B'){
+      modelKey = '150';
+      if(has('18k') && has('silver')) why.push('18K gold plus 925 silver is the classic case for stepping up from the 100B to the 150B — a bit more pulse energy for the mix.');
+      else why.push('Your materials call for a bit more pulse energy than our base system — the 150B gives you that margin.');
+    } else {
+      // Tier C: choose between 200B and 230B on duty cycle
+      if(highVolume){
+        modelKey = '230b';
+        why.push('Your materials plus a high duty cycle put you at the top of the bench-top range — the 230B is our highest-power bench-top system.');
+      } else {
+        modelKey = '200';
+        why.push('Your materials are more demanding to weld — the 200B gives you the most pulse energy and spot-size range in the bench-top lineup.');
+      }
+      if(has('22k') || has('puregold')) why.push('22K and pure/24K gold are softer and more reflective — the extra peak power keeps welds clean.');
+      if(has('stainless')) why.push('Stainless steel is well covered across the 200B / 230B / 200P range.');
+      if(has('copper')) why.push('Copper is reflective and highly conductive — one of the more demanding metals to weld — so extra headroom helps.');
+      if(has('platinum')) why.push('Platinum benefits from the extra peak power at this end of the lineup.');
+      if(has('aluminum')) why.push('Aluminum benefits from the extra peak power Nd:YAG systems carry at this end of the lineup.');
+    }
+
+    const addons = [];
+    if(a.rotary==='yes' && modelKey!=='200p') addons.push('Tilt-rotary fixture (D69) for ring and cylindrical part welding');
+    if(a.rotary==='yes' && modelKey==='200p') addons.push('D80 tilt-rotary — larger-capacity, exclusive to the 200P');
+    if(a.linear==='yes' && modelKey!=='200p') addons.push('Manual X-Y table for flat and irregular parts');
+    if(highVolume && modelKey!=='200p') addons.push('External water chiller upgrade for higher duty-cycle use');
+    if(a.downtime==='24h' || a.downtime==='72h') addons.push('24-hour repair-or-replace priority service plan — you flagged downtime as critical');
+    if(a.training==='onsite') addons.push('On-site installation & hands-on training (half-day)');
+    if(a.training==='virtual') addons.push('Virtual training walkthrough');
+
+    return { modelKey, why, addons };
+  }
+
+  function finish(){
+    const rec = recommend(answers);
+    const sys = SYSTEMS[rec.modelKey];
+
+    document.getElementById('wizForm').style.display = 'none';
+    document.getElementById('wizResults').style.display = 'block';
+
+    document.getElementById('resImg').src = sys.img;
+    document.getElementById('resImg').alt = sys.name;
+    document.getElementById('resTagline').textContent = sys.tagline;
+    document.getElementById('resName').textContent = sys.name;
+    document.getElementById('resFit').textContent = sys.fit;
+
+    const priceEl = document.getElementById('resPrice');
+    if(sys.price){
+      priceEl.textContent = 'Starting at $' + sys.price.toLocaleString();
+      priceEl.style.display = 'block';
+    } else {
+      priceEl.style.display = 'none';
+    }
+
+    const whyEl = document.getElementById('resWhy');
+    whyEl.innerHTML = '';
+    rec.why.forEach(w=>{ const li=document.createElement('li'); li.textContent = w; whyEl.appendChild(li); });
+
+    const addonsEl = document.getElementById('resAddons');
+    addonsEl.innerHTML = '';
+    if(rec.addons.length===0){
+      addonsEl.innerHTML = '<p style="color:var(--slate-400);font-size:14.5px;">No extra accessories needed based on your answers — a base system covers it.</p>';
+    } else {
+      rec.addons.forEach(t=>{
+        const row = document.createElement('div');
+        row.className = 'addon-row';
+        row.innerHTML = '<span>' + t + '</span><span style="color:var(--amber-500);">&#10003;</span>';
+        addonsEl.appendChild(row);
+      });
+    }
+
+    const buyBtn = document.getElementById('resBuyBtn');
+    const benchtopKeys = ['100', '150', '200', '230b'];
+    if(benchtopKeys.indexOf(rec.modelKey) !== -1 || rec.modelKey === '200p'){
+      buyBtn.href = '/order.html?model=' + (rec.modelKey === '200p' ? 'pedestal' : 'benchtop');
+      buyBtn.textContent = 'Buy Online';
+      buyBtn.removeAttribute('target');
+    } else {
+      buyBtn.href = '/contact.html?system=maxlase-' + rec.modelKey;
+      buyBtn.textContent = 'Request a Quote';
+      buyBtn.removeAttribute('target');
+    }
+    document.getElementById('resViewBtn').href = sys.url;
+
+    const powerEl = document.getElementById('resPowerText');
+    if(answers.voltage === '110'){
+      const amps110 = Math.round(sys.amps220 * 2);
+      powerEl.textContent = 'Ships with its transformer included, so it runs on your 110V supply. Ruisheng confirms ~' + sys.amps220 + ' A at 220V, 1-phase — on 110V, expect roughly double the draw (~' + amps110 + ' A, estimated). Have your electrician confirm before install.';
+    } else if(answers.voltage === '220'){
+      powerEl.textContent = 'Ruisheng-confirmed draw: ~' + sys.amps220 + ' A at 220V, 1-phase, 50/60Hz — ' + sys.wire + ' supply wire minimum.';
+    } else {
+      powerEl.textContent = 'Runs on either 110V or 220V (transformer included). At 220V, 1-phase, confirmed draw is ~' + sys.amps220 + ' A (' + sys.wire + ' supply wire minimum) — let us know your shop voltage and we\'ll confirm the exact amperage.';
+    }
+
+    if(answers.zip && window.maxlaseEstimateShipping){
+      const est = window.maxlaseEstimateShipping(answers.zip, rec.modelKey);
+      if(est.ok){
+        document.getElementById('resShip').style.display = 'block';
+        document.getElementById('resShipText').textContent =
+          '~$' + est.estimate.toLocaleString() + ' to ' + answers.zip + ' (' + est.miles + ' miles from our West Palm Beach, FL facility). Final freight confirmed at quote.';
+      }
+    }
+
+    document.getElementById('hidRecommendation').value = sys.name + ' — ' + rec.why.join(' | ');
+    document.getElementById('hidAnswers').value = JSON.stringify(answers);
+
+    document.getElementById('emailForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(data).toString() })
+        .then(()=>{ form.style.display='none'; document.getElementById('emailSent').style.display='block'; })
+        .catch(()=>{ form.style.display='none'; document.getElementById('emailSent').style.display='block'; });
+    });
+
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  showStep(0);
+})();
+</script>
+</body>
+</html>

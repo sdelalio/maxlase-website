@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Order Online — MaxLase Benchtop &amp; Pedestal | MaxLase</title>
+<meta name="description" content="Order the MaxLase Benchtop or Pedestal (200P) online — pick your options, see the price, and submit your order. Need a different configuration? We'll find the system that fits." />
+<link rel="icon" href="/assets/logos/maxlase-logo-cropped.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  .model-tabs{display:flex;gap:14px;margin-bottom:32px;flex-wrap:wrap;}
+  .model-tab{
+    flex:1;min-width:220px;border:2px solid #e6e8ec;border-radius:var(--radius-md);padding:20px 22px;
+    cursor:pointer;background:var(--white);transition:border-color .15s, background .15s;user-select:none;
+  }
+  .model-tab:hover{border-color:var(--slate-400);}
+  .model-tab.selected{border-color:var(--amber-500);background:var(--amber-050);}
+  .model-tab h3{margin:0 0 4px;font-size:19px;}
+  .model-tab .tag{display:block;font-size:12.5px;font-weight:600;color:var(--amber-500);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px;}
+  .model-tab .price{font-size:22px;font-weight:800;color:var(--navy-950);margin-top:8px;}
+  .model-tab p{font-size:13.5px;color:var(--slate-400);margin:0;}
+
+  .cfg-grid{display:grid;grid-template-columns:2fr 1fr;gap:32px;align-items:start;}
+  @media(max-width:860px){.cfg-grid{grid-template-columns:1fr;}}
+
+  .opt-group{margin-bottom:28px;}
+  .opt-group h4{font-size:14px;text-transform:uppercase;letter-spacing:.03em;color:var(--slate-400);margin-bottom:12px;}
+  .opt-row{
+    display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid #e6e8ec;cursor:pointer;
+  }
+  .opt-row:last-child{border-bottom:none;}
+  .opt-row input[type="checkbox"], .opt-row input[type="radio"]{margin-top:3px;width:17px;height:17px;flex-shrink:0;accent-color:var(--amber-500);}
+  .opt-row .opt-thumb{width:56px;height:56px;border-radius:var(--radius-sm);overflow:hidden;background:var(--off-white);border:1px solid #e6e8ec;flex-shrink:0;}
+  .opt-row .opt-thumb img{width:100%;height:100%;object-fit:contain;display:block;}
+  .opt-row .opt-body{flex:1;}
+  .opt-row .opt-name{font-weight:600;font-size:14.5px;color:var(--navy-900);}
+  .opt-row .opt-desc{font-size:13px;color:var(--slate-400);margin-top:2px;}
+
+  .summary-card{border:1px solid #e6e8ec;border-radius:var(--radius-lg);padding:26px;background:var(--off-white);position:sticky;top:20px;}
+  .summary-card h4{margin-top:0;font-size:16px;}
+  .summary-line{display:flex;justify-content:space-between;font-size:14px;padding:7px 0;border-bottom:1px solid #e6e8ec;}
+  .summary-line:last-of-type{border-bottom:none;}
+  .summary-total{display:flex;justify-content:space-between;font-size:19px;font-weight:800;color:var(--navy-950);margin-top:12px;padding-top:12px;border-top:2px solid var(--navy-950);}
+  .no-options-note{font-size:13px;color:var(--slate-400);font-style:italic;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="/index.html">
+      <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
+      <span class="brand-tag">Offered exclusively by Weld Solutions</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li class="has-dropdown">
+          <a href="/shop.html">Laser Systems</a>
+          <ul class="dropdown">
+            <li><a href="/systems/benchtop.html">Benchtop</a></li>
+            <li><a href="/systems/pedestal.html">Pedestal</a></li>
+            <li><a href="/systems/cnc.html">CNC</a></li>
+          </ul>
+        </li>
+        <li><a href="/accessories.html">Accessories</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+        <li><a href="/contact.html">Contact Us</a></li>
+      </ul>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary btn-sm" href="/order.html">Buy Online</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/index.html">Home</a> / Order Online</div>
+    <span class="eyebrow">Order Online</span>
+    <h1>Configure your MaxLase Benchtop or Pedestal.</h1>
+    <p class="lead">These two platforms cover the vast majority of what we sell — pick your options below and see the price. Need a CNC production system or a configuration outside these two? <a href="/contact.html" style="color:var(--amber-400);text-decoration:underline;">Contact us</a> — if what we offer here isn't perfect for your application, we'll find the system that is.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <div class="model-tabs" id="modelTabs">
+      <div class="model-tab selected" data-model="benchtop" data-price="9500">
+        <span class="tag">100W &ndash; 230W</span>
+        <h3>MaxLase Benchtop</h3>
+        <p>All gold and silver work at the jewelry bench. Nd:YAG, benchtop form factor.</p>
+        <div class="price">From $9,500</div>
+      </div>
+      <div class="model-tab" data-model="pedestal" data-price="14500">
+        <span class="tag">Pedestal Platform</span>
+        <h3>MaxLase Pedestal (200P)</h3>
+        <p>Floor-standing production platform with built-in chiller and motorized work table.</p>
+        <div class="price">From $14,500</div>
+      </div>
+    </div>
+
+    <div class="cfg-grid">
+      <div>
+        <div class="opt-group" id="powerLevelGroup">
+          <h4>Power level</h4>
+          <label class="opt-row">
+            <input type="radio" name="power" value="100W" checked />
+            <div class="opt-body">
+              <div class="opt-name">100W</div>
+              <div class="opt-desc">Most popular — all gold and silver work.</div>
+            </div>
+          </label>
+          <label class="opt-row">
+            <input type="radio" name="power" value="150W" />
+            <div class="opt-body">
+              <div class="opt-name">150W</div>
+              <div class="opt-desc">Deeper penetration.</div>
+            </div>
+          </label>
+          <label class="opt-row">
+            <input type="radio" name="power" value="200W" />
+            <div class="opt-body">
+              <div class="opt-name">200W</div>
+              <div class="opt-desc">High power / high volume.</div>
+            </div>
+          </label>
+          <label class="opt-row">
+            <input type="radio" name="power" value="230W" />
+            <div class="opt-body">
+              <div class="opt-name">230W (230B)</div>
+              <div class="opt-desc">Max power, plus Bluetooth &amp; media player.</div>
+            </div>
+          </label>
+          <p class="no-options-note" style="margin-top:8px;">Power level affects final pricing — we'll confirm when we follow up on your order.</p>
+        </div>
+
+        <div class="opt-group">
+          <h4>Base style <span style="font-weight:400;text-transform:none;color:var(--slate-400);">(included, no charge)</span></h4>
+          <label class="opt-row">
+            <input type="radio" name="base" value="Adjustable slotted base" checked />
+            <div class="opt-body">
+              <div class="opt-name">Adjustable slotted base</div>
+              <div class="opt-desc">Height-adjustable mounting, fits most benches.</div>
+            </div>
+          </label>
+          <label class="opt-row">
+            <input type="radio" name="base" value="Fixed base" />
+            <div class="opt-body">
+              <div class="opt-name">Fixed (solid) base</div>
+              <div class="opt-desc">Solid, non-adjustable mounting.</div>
+            </div>
+          </label>
+        </div>
+
+        <div class="opt-group">
+          <h4>Options &amp; accessories</h4>
+          <div id="optionsList"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="summary-card">
+          <h4 id="sumModelName">MaxLase Benchtop</h4>
+          <div class="summary-line"><span>Base system</span><span id="sumBase">$9,500</span></div>
+          <div id="sumOptions"></div>
+          <p style="font-size:12px;color:var(--slate-400);margin-top:16px;">Base price shown excludes shipping and tax. Options are priced separately — we'll confirm your full quote, including any selected accessories, when we follow up on your order.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="bg-off">
+  <div class="container" style="max-width:640px;">
+    <div class="section-head left">
+      <span class="eyebrow">Submit Your Order</span>
+      <h2>Send us this configuration</h2>
+      <p class="lead">We'll follow up within one business day to confirm pricing, shipping, and lead time before anything is finalized.</p>
+    </div>
+    <!-- Netlify Forms: this form posts to Netlify's built-in form handling once deployed. -->
+    <form name="order" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="orderForm">
+      <input type="hidden" name="form-name" value="order" />
+      <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
+      <input type="hidden" name="configuration" id="hidConfiguration" />
+      <input type="hidden" name="base_price" id="hidBasePrice" />
+      <div class="form-grid">
+        <div>
+          <label for="ordName">Full name</label>
+          <input type="text" id="ordName" name="name" required />
+        </div>
+        <div>
+          <label for="ordCompany">Company / shop name</label>
+          <input type="text" id="ordCompany" name="company" />
+        </div>
+        <div>
+          <label for="ordEmail">Email</label>
+          <input type="email" id="ordEmail" name="email" required />
+        </div>
+        <div>
+          <label for="ordPhone">Phone</label>
+          <input type="tel" id="ordPhone" name="phone" />
+        </div>
+        <div class="full">
+          <label for="ordZip">Ship-to ZIP</label>
+          <input type="text" id="ordZip" name="zip" placeholder="e.g. 33401" />
+        </div>
+        <div class="full">
+          <label for="ordNotes">Notes (optional)</label>
+          <textarea id="ordNotes" name="notes" placeholder="Anything else we should know about your application or timeline..."></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top:20px;">Submit Order Request</button>
+    </form>
+    <p id="orderSent" style="display:none;color:var(--jewel-600, #7a5a1e);font-weight:600;margin-top:16px;">Thanks — we've got your configuration and will follow up within one business day.</p>
+  </div>
+</section>
+
+<section class="bg-navy">
+  <div class="container">
+    <div class="cta-band" style="background:transparent;padding:0;">
+      <div>
+        <h3>Need something outside these two systems?</h3>
+        <p>CNC production systems, custom rotary/production setups — if what we offer here isn't perfect for your application, we'll find the system that is.</p>
+      </div>
+      <a href="/contact.html" class="btn btn-primary">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
+        </div>
+        <p>Small, powerful Nd:YAG laser welders for jewelry bench work and small industrial parts — spot welding, tacking, and seam penetration up to 2mm on even your most demanding metals. Sourced overseas, inspected, serviced, and supported entirely in the USA.</p>
+        <div class="ws-badge">
+          <img src="/assets/logos/weld-solutions-logo.png" alt="Weld Solutions" />
+          <span>Offered exclusively by Weld Solutions</span>
+        </div>
+      </div>
+      <div>
+        <h5>Laser Systems</h5>
+        <ul>
+          <li><a href="/systems/benchtop.html">Benchtop</a></li>
+          <li><a href="/systems/pedestal.html">Pedestal</a></li>
+          <li><a href="/systems/cnc.html">CNC</a></li>
+          <li><a href="/accessories.html">Accessories</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/jewelers.html">For Jewelers</a></li>
+          <li><a href="/industrial.html">For Industrial</a></li>
+          <li><a href="/selector.html">Find Your System</a></li>
+          <li><a href="/technology.html">Technology</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/resources.html">Resources</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Support</h5>
+        <ul>
+          <li><a href="/order.html">Buy Online</a></li>
+          <li><a href="/contact.html">Contact Us</a></li>
+          <li><a href="mailto:info@maxlase.com">info@maxlase.com</a></li>
+          <li><a href="tel:+19125551234">Call Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> MaxLase. A Weld Solutions company.</span>
+      <span>West Palm Beach, FL &middot; Sales, service &amp; training based in the USA</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script>
+(function(){
+  var OPTIONS = {
+    "benchtop": [
+      {name:"Tilt-rotary D69 + driver", desc:"Motorized rotary fixture for ring and cylindrical part welding.", img:"/assets/images/rotary-d69.jpg"},
+      {name:"Rotary control software", desc:"Required to drive the tilt-rotary attachment."},
+      {name:"External water chiller (UL-10)", desc:"Upgrade cooling capacity for high-duty-cycle use."},
+      {name:"Manual X-Y table", desc:"Precision positioning table for flat and irregular parts.", img:"/assets/images/maxlase-xy-table.jpg"},
+      {name:"Cover glass (10-pack)", desc:"Spare protective lens covers."},
+      {name:"Spare xenon flashlamps, 2-pack", desc:"Spare lamps for the Benchtop."},
+      {name:"On-site install + training", desc:"Half-day US-based installation and hands-on training."},
+      {name:"24 Hr Repair-Replace", desc:"Priority service plan for production environments."}
+    ],
+    "pedestal": [
+      {name:"Tilt-rotary D80 + driver", desc:"Larger-capacity motorized rotary, exclusive to the 200P.", img:"/assets/images/rotary-d80.jpg"},
+      {name:"Rotary control software", desc:"Required to drive the tilt-rotary attachment."},
+      {name:"External water chiller (UL-10)", desc:"Upgrade cooling capacity for high-duty-cycle production use."},
+      {name:"Cover glass (10-pack)", desc:"Spare protective lens covers."},
+      {name:"Spare xenon flashlamps, 2-pack", desc:"Spare lamps for the 200P."},
+      {name:"On-site install + training", desc:"Half-day US-based installation and hands-on training."},
+      {name:"24 Hr Repair-Replace", desc:"Priority service plan for production environments that can't afford downtime."}
+    ]
+  };
+  var MODEL_NAME = {"benchtop":"MaxLase Benchtop", "pedestal":"MaxLase Pedestal (200P)"};
+
+  var currentModel = "benchtop";
+  var tabs = document.querySelectorAll('.model-tab');
+  var optionsList = document.getElementById('optionsList');
+  var powerLevelGroup = document.getElementById('powerLevelGroup');
+  var fmt = function(n){ return "$" + n.toLocaleString('en-US'); };
+
+  function renderOptions(){
+    optionsList.innerHTML = "";
+    OPTIONS[currentModel].forEach(function(opt, i){
+      var row = document.createElement('label');
+      row.className = 'opt-row';
+      var thumb = opt.img ? '<div class="opt-thumb"><img src="' + opt.img + '" alt="' + opt.name + '" /></div>' : '';
+      row.innerHTML =
+        '<input type="checkbox" data-name="' + opt.name + '" />' +
+        thumb +
+        '<div class="opt-body"><div class="opt-name">' + opt.name + '</div><div class="opt-desc">' + opt.desc + '</div></div>';
+      optionsList.appendChild(row);
+    });
+    optionsList.querySelectorAll('input[type="checkbox"]').forEach(function(cb){
+      cb.addEventListener('change', updateSummary);
+    });
+  }
+
+  function updateSummary(){
+    var tab = document.querySelector('.model-tab.selected');
+    var basePrice = parseInt(tab.getAttribute('data-price'), 10);
+    var modelLabel = MODEL_NAME[currentModel];
+    var powerEl = document.querySelector('input[name="power"]:checked');
+    if(currentModel === 'benchtop' && powerEl){
+      modelLabel += ' — ' + powerEl.value;
+    }
+    document.getElementById('sumModelName').textContent = modelLabel;
+    document.getElementById('sumBase').textContent = fmt(basePrice);
+
+    var sumOptions = document.getElementById('sumOptions');
+    sumOptions.innerHTML = "";
+    var selected = [];
+    optionsList.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb){
+      var name = cb.getAttribute('data-name');
+      selected.push(name);
+      var line = document.createElement('div');
+      line.className = 'summary-line';
+      line.innerHTML = '<span>' + name + '</span><span style="color:var(--amber-500);">&#10003;</span>';
+      sumOptions.appendChild(line);
+    });
+
+    var baseStyle = document.querySelector('input[name="base"]:checked').value;
+    var configText = modelLabel + ' — base: ' + baseStyle +
+      (selected.length ? '; options selected: ' + selected.join(', ') : '; no options selected');
+    document.getElementById('hidConfiguration').value = configText;
+    document.getElementById('hidBasePrice').value = fmt(basePrice);
+  }
+
+  function updatePowerVisibility(){
+    powerLevelGroup.style.display = (currentModel === 'benchtop') ? '' : 'none';
+  }
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('selected'); });
+      tab.classList.add('selected');
+      currentModel = tab.getAttribute('data-model');
+      updatePowerVisibility();
+      renderOptions();
+      updateSummary();
+    });
+  });
+
+  document.querySelectorAll('input[name="base"]').forEach(function(r){
+    r.addEventListener('change', updateSummary);
+  });
+  document.querySelectorAll('input[name="power"]').forEach(function(r){
+    r.addEventListener('change', updateSummary);
+  });
+
+  // Preselect a model if arriving with ?model=benchtop or ?model=pedestal (e.g. from the system finder)
+  // Also accept legacy values (100b/150b/200b/230b -> benchtop, 200p -> pedestal) for old links.
+  var params = new URLSearchParams(window.location.search);
+  var preModel = params.get('model');
+  var legacyToNew = {"100b":"benchtop","150b":"benchtop","200b":"benchtop","230b":"benchtop","200p":"pedestal"};
+  if(legacyToNew[preModel]) preModel = legacyToNew[preModel];
+  if(preModel === 'benchtop' || preModel === 'pedestal'){
+    tabs.forEach(function(t){ t.classList.remove('selected'); });
+    document.querySelector('.model-tab[data-model="' + preModel + '"]').classList.add('selected');
+    currentModel = preModel;
+  }
+
+  updatePowerVisibility();
+  renderOptions();
+  updateSummary();
+
+  var form = document.getElementById('orderForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var data = {};
+    new FormData(form).forEach(function(v,k){ data[k]=v; });
+    fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(data).toString() })
+      .then(function(){
+        form.style.display = 'none';
+        document.getElementById('orderSent').style.display = 'block';
+      })
+      .catch(function(){
+        form.style.display = 'none';
+        document.getElementById('orderSent').style.display = 'block';
+      });
+  });
+})();
+</script>
+</body>
+</html>

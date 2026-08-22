@@ -2,6 +2,36 @@
   publish = "."
 
 [[redirects]]
+  from = "/videos.html"
+  to = "/resources.html"
+  status = 301
+
+[[redirects]]
+  from = "/support.html"
+  to = "/contact.html"
+  status = 301
+
+[[redirects]]
+  from = "/products/maxlase-100.html"
+  to = "/products/maxlase-100b.html"
+  status = 301
+
+[[redirects]]
+  from = "/products/maxlase-150.html"
+  to = "/products/maxlase-150b.html"
+  status = 301
+
+[[redirects]]
+  from = "/products/maxlase-200.html"
+  to = "/products/maxlase-200b.html"
+  status = 301
+
+[[redirects]]
+  from = "/products/maxlase-230x.html"
+  to = "/products/maxlase-230b.html"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404

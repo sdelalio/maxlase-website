@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resources — Videos, Weld Parameters &amp; Tips | MaxLase</title>
+<meta name="description" content="MaxLase resource library: weld demo videos, starting parameters by material, and tips for jewelry laser welding and tacking." />
+<link rel="icon" href="/assets/logos/maxlase-logo-cropped.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  .video-card{border:1px solid #e6e8ec;border-radius:var(--radius-md);overflow:hidden;background:var(--white);}
+  .video-card video{width:100%;display:block;background:#000;aspect-ratio:16/9;object-fit:cover;}
+  .video-embed{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
+  .video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;display:block;}
+  .video-card .body{padding:18px 20px;}
+  .video-card h4{margin:0 0 6px;font-size:16px;}
+  .video-card p{margin:0;font-size:13.5px;color:var(--slate-400);}
+  .video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+  @media(max-width:800px){.video-grid{grid-template-columns:1fr;}}
+  .ext-link-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #e6e8ec;}
+  .ext-link-row:last-child{border-bottom:none;}
+  .tip-card{border:1px solid #e6e8ec;border-radius:var(--radius-md);padding:22px;background:var(--white);}
+  .tip-card h4{margin-bottom:8px;font-size:16px;}
+  .tip-card p{font-size:14.5px;color:var(--slate-400);margin:0;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="/index.html">
+      <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
+      <span class="brand-tag">Offered exclusively by Weld Solutions</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li class="has-dropdown">
+          <a href="/shop.html">Laser Systems</a>
+          <ul class="dropdown">
+            <li><a href="/systems/benchtop.html">Benchtop</a></li>
+            <li><a href="/systems/pedestal.html">Pedestal</a></li>
+            <li><a href="/systems/cnc.html">CNC</a></li>
+          </ul>
+        </li>
+        <li><a href="/accessories.html">Accessories</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+        <li><a href="/contact.html">Contact Us</a></li>
+      </ul>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary btn-sm" href="/order.html">Buy Online</a>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/index.html">Home</a> / Resources</div>
+    <span class="eyebrow">Resource Library</span>
+    <h1>Weld demos, reference parameters, and tips.</h1>
+    <p class="lead">A growing library for jewelry and small-parts laser welding — video demos, starting parameters by material, and practical tips from the bench. Check back often, this section will keep growing.</p>
+  </div>
+</section>
+
+<section id="welder-panel" class="bg-navy">
+  <div class="container">
+    <div style="max-width:640px;">
+      <span class="eyebrow">Free Tool</span>
+      <h2>Welder Settings Calculator</h2>
+      <p>Set pulse, current (or voltage on the 200P), frequency and spot — see the joules, the peak and average power, and how deep it will melt, before you strike the first shot. Works for every machine in the lineup, enforced against each one's actual rating.</p>
+      <a href="/resources/welder-panel.html" class="btn btn-primary" style="margin-top:8px;">Open the calculator</a>
+    </div>
+  </div>
+</section>
+
+<section id="videos">
+  <div class="container">
+    <div class="section-head left">
+      <span class="eyebrow">Video Library</span>
+      <h2>Weld demos &amp; training</h2>
+    </div>
+    <div class="video-grid">
+      <div class="video-card">
+        <video controls preload="metadata" poster="/assets/images/poster-operation-guidance.jpg">
+          <source src="/assets/videos/operation-guidance.mp4" type="video/mp4" />
+        </video>
+        <div class="body">
+          <h4>MaxLase Operation Guidance</h4>
+          <p>A walkthrough of basic machine operation and setup.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <video controls preload="metadata" poster="/assets/images/poster-vti-tack-params.jpg">
+          <source src="/assets/videos/vti-tack-params.mp4" type="video/mp4" />
+        </video>
+        <div class="body">
+          <h4>Tack Weld Parameters</h4>
+          <p>Reference footage covering tack settings in practice.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <video controls preload="metadata" poster="/assets/images/poster-wsw200-weld-on-plate-1.jpg">
+          <source src="/assets/videos/wsw200-weld-on-plate-1.mp4" type="video/mp4" />
+        </video>
+        <div class="body">
+          <h4>WSW-200 — Weld on Plate (1)</h4>
+          <p>Seam welding demonstration on flat plate stock.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <video controls preload="metadata" poster="/assets/images/poster-wsw200-weld-on-plate-2.jpg">
+          <source src="/assets/videos/wsw200-weld-on-plate-2.mp4" type="video/mp4" />
+        </video>
+        <div class="body">
+          <h4>WSW-200 — Weld on Plate (2)</h4>
+          <p>A second pass demonstrating consistency across runs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-off">
+  <div class="container">
+    <div class="section-head left">
+      <span class="eyebrow">Also worth watching</span>
+      <h2>External reference videos</h2>
+      <p class="lead">A few outside demos we point customers to for technique reference — not filmed on MaxLase equipment, but useful for seeing laser welding technique in action.</p>
+    </div>
+    <div class="ext-link-row">
+      <span>Retipping a prong with a laser welder — Stuller</span>
+      <a href="https://www.stuller.com/video/watch/78015/" target="_blank" rel="noopener" class="btn btn-sm btn-outline-dark">Watch &#9656;</a>
+    </div>
+    <div class="video-grid" style="margin-top:20px;">
+      <div class="video-card">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/5dlvEgjk41I" title="Retipping a gold & diamond ring prong — LaserStar" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="body">
+          <h4>Retipping a gold &amp; diamond ring prong</h4>
+          <p>Reference technique demo — LaserStar.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/n4c8q1H9fyU" title="Laser welding: retipping gold & diamond ring (2) — LaserStar" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="body">
+          <h4>Retipping gold &amp; diamond ring (2)</h4>
+          <p>Reference technique demo — LaserStar.</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/VjlaTrgiKVc" title="Laser welding: retipping gold & diamond ring (3) — LaserStar" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="body">
+          <h4>Retipping gold &amp; diamond ring (3)</h4>
+          <p>Reference technique demo — LaserStar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="parameters">
+  <div class="container">
+    <div class="section-head left">
+      <span class="eyebrow">Weld Parameters</span>
+      <h2>Quick reference — starting settings by material</h2>
+      <p class="lead">Baseline settings shown for a 200W system (the most common starting point). Lower-power systems (100W/150W) generally run at the higher end of the current range shown to hit the same result — see each product's spec page for model-specific tables. Always confirm on scrap before running a production part.</p>
+    </div>
+    <table class="specs-table data-table">
+      <tr><th>Material</th><th>Pulse</th><th>Current</th><th>Frequency</th><th>Spot</th></tr>
+      <tr><td>Stainless steel</td><td>2–4 ms</td><td>10–20 A</td><td>3–10 Hz</td><td>0.8–3 mm</td></tr>
+      <tr><td>18K gold</td><td>1.5–3 ms</td><td>20–40 A</td><td>3–8 Hz</td><td>0.8–2.5 mm</td></tr>
+      <tr><td>925 silver</td><td>2–3 ms</td><td>60–70 A</td><td>3–6 Hz</td><td>0.3–0.8 mm</td></tr>
+      <tr><td>Red copper</td><td>2 ms</td><td>70–100 A</td><td>2–3 Hz</td><td>0.2–0.6 mm</td></tr>
+      <tr><td>Aluminum</td><td>2–5 ms</td><td>40–60 A</td><td>3–6 Hz</td><td>0.5–1.5 mm</td></tr>
+    </table>
+    <p style="margin-top:16px;">Full model-specific tables: <a href="/products/maxlase-100b.html" style="color:var(--amber-500);text-decoration:underline;">MaxLase 100B</a>, <a href="/products/maxlase-150b.html" style="color:var(--amber-500);text-decoration:underline;">150B</a>, <a href="/products/maxlase-200b.html" style="color:var(--amber-500);text-decoration:underline;">200B</a>, <a href="/products/maxlase-230b.html" style="color:var(--amber-500);text-decoration:underline;">230B</a>, <a href="/products/maxlase-200p.html" style="color:var(--amber-500);text-decoration:underline;">200P</a>.</p>
+  </div>
+</section>
+
+<section class="bg-off">
+  <div class="container">
+    <div class="section-head left">
+      <span class="eyebrow">Tips from the bench</span>
+      <h2>Jewelry &amp; tacking tips</h2>
+      <p class="lead">Short, practical notes — this list grows as we publish more. Have a tip or technique worth sharing? <a href="/contact.html" style="color:var(--amber-500);text-decoration:underline;">Send it our way.</a></p>
+    </div>
+    <div class="feature-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="tip-card">
+        <h4>Always test on scrap first</h4>
+        <p>Metal purity, plating, and prior heat history all shift what "correct" settings look like — a 30-second test weld on scrap saves a ruined piece.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Clean the joint before you weld</h4>
+        <p>Oils, polish residue, and oxidation cause inconsistent welds and pitting. A quick ultrasonic clean or alcohol wipe before welding makes a visible difference.</p>
+      </div>
+      <div class="tip-card">
+        <h4>Lower frequency for stone-in-place repairs</h4>
+        <p>When welding near a mounted stone, dropping frequency and pulse width reduces heat buildup — keep an eye on total pulse count during longer repairs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-navy">
+  <div class="container">
+    <div class="cta-band" style="background:transparent;padding:0;">
+      <div>
+        <h3>Have a question a video didn't answer?</h3>
+        <p>Send us your part or application and we'll walk you through it.</p>
+      </div>
+      <a href="/contact.html" class="btn btn-primary">Talk to an Engineer</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <span class="brand-mark"><img src="/assets/logos/maxlase-logo-cropped.png" alt="MaxLase" /></span>
+        </div>
+        <p>Small, powerful Nd:YAG laser welders for jewelry bench work and small industrial parts — spot welding, tacking, and seam penetration up to 2mm on even your most demanding metals. Sourced overseas, inspected, serviced, and supported entirely in the USA.</p>
+        <div class="ws-badge">
+          <img src="/assets/logos/weld-solutions-logo.png" alt="Weld Solutions" />
+          <span>Offered exclusively by Weld Solutions</span>
+        </div>
+      </div>
+      <div>
+        <h5>Laser Systems</h5>
+        <ul>
+          <li><a href="/systems/benchtop.html">Benchtop</a></li>
+          <li><a href="/systems/pedestal.html">Pedestal</a></li>
+          <li><a href="/systems/cnc.html">CNC</a></li>
+          <li><a href="/accessories.html">Accessories</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/jewelers.html">For Jewelers</a></li>
+          <li><a href="/industrial.html">For Industrial</a></li>
+          <li><a href="/selector.html">Find Your System</a></li>
+          <li><a href="/technology.html">Technology</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/resources.html">Resources</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Support</h5>
+        <ul>
+          <li><a href="/order.html">Buy Online</a></li>
+          <li><a href="/contact.html">Contact Us</a></li>
+          <li><a href="mailto:info@maxlase.com">info@maxlase.com</a></li>
+          <li><a href="tel:+19125551234">Call Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> MaxLase. A Weld Solutions company.</span>
+      <span>West Palm Beach, FL &middot; Sales, service &amp; training based in the USA</span>
+    </div>
+  </div>
+</footer>
+<script src="/js/main.js"></script>
+</body>
+</html>
