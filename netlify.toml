@@ -2,6 +2,16 @@
   publish = "."
 
 [[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/order"
+  to = "/order.html"
+  status = 200
+
+[[redirects]]
   from = "/videos.html"
   to = "/resources.html"
   status = 301
