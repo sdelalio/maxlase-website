@@ -166,9 +166,9 @@
       <div>
         <div class="summary-card">
           <h4 id="sumModelName">MaxLase Benchtop</h4>
-          <div class="summary-line"><span>Base system</span><span id="sumBase">$9,500</span></div>
+          <div class="summary-line"><span>Starting from</span><span id="sumBase">From $9,500</span></div>
           <div id="sumOptions"></div>
-          <p style="font-size:12px;color:var(--slate-400);margin-top:16px;">Base price shown excludes shipping and tax. Options are priced separately — we'll confirm your full quote, including any selected accessories, when we follow up on your order.</p>
+          <p style="font-size:12px;color:var(--slate-400);margin-top:16px;">Starting price shown is a minimum and excludes shipping and tax. Final pricing depends on your selected configuration and options — we'll confirm your full quote when we follow up on your order.</p>
         </div>
       </div>
     </div>
@@ -341,7 +341,7 @@
       modelLabel += ' — ' + powerEl.value;
     }
     document.getElementById('sumModelName').textContent = modelLabel;
-    document.getElementById('sumBase').textContent = fmt(basePrice);
+    document.getElementById('sumBase').textContent = 'From ' + fmt(basePrice);
 
     var sumOptions = document.getElementById('sumOptions');
     sumOptions.innerHTML = "";
