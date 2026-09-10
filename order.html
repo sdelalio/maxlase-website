@@ -109,52 +109,34 @@
         <div class="opt-group" id="powerLevelGroup">
           <h4>Power level</h4>
           <label class="opt-row">
-            <input type="radio" name="power" value="100W" checked />
+            <input type="radio" name="power" value="100W (100B)" checked />
             <div class="opt-body">
-              <div class="opt-name">100W</div>
+              <div class="opt-name">100W (100B)</div>
               <div class="opt-desc">Most popular — all gold and silver work.</div>
             </div>
           </label>
           <label class="opt-row">
-            <input type="radio" name="power" value="150W" />
+            <input type="radio" name="power" value="150W (150B)" />
             <div class="opt-body">
-              <div class="opt-name">150W</div>
+              <div class="opt-name">150W (150B)</div>
               <div class="opt-desc">Deeper penetration.</div>
             </div>
           </label>
           <label class="opt-row">
-            <input type="radio" name="power" value="200W" />
+            <input type="radio" name="power" value="200W (200B)" />
             <div class="opt-body">
-              <div class="opt-name">200W</div>
+              <div class="opt-name">200W (200B)</div>
               <div class="opt-desc">High power / high volume.</div>
             </div>
           </label>
           <label class="opt-row">
-            <input type="radio" name="power" value="230W" />
+            <input type="radio" name="power" value="230W (230B)" />
             <div class="opt-body">
               <div class="opt-name">230W (230B)</div>
               <div class="opt-desc">Max power, plus Bluetooth &amp; media player.</div>
             </div>
           </label>
           <p class="no-options-note" style="margin-top:8px;">Power level affects final pricing — we'll confirm when we follow up on your order.</p>
-        </div>
-
-        <div class="opt-group">
-          <h4>Base style <span style="font-weight:400;text-transform:none;color:var(--slate-400);">(included, no charge)</span></h4>
-          <label class="opt-row">
-            <input type="radio" name="base" value="Adjustable slotted base" checked />
-            <div class="opt-body">
-              <div class="opt-name">Adjustable slotted base</div>
-              <div class="opt-desc">Height-adjustable mounting, fits most benches.</div>
-            </div>
-          </label>
-          <label class="opt-row">
-            <input type="radio" name="base" value="Fixed base" />
-            <div class="opt-body">
-              <div class="opt-name">Fixed (solid) base</div>
-              <div class="opt-desc">Solid, non-adjustable mounting.</div>
-            </div>
-          </label>
         </div>
 
         <div class="opt-group">
@@ -355,8 +337,7 @@
       sumOptions.appendChild(line);
     });
 
-    var baseStyle = document.querySelector('input[name="base"]:checked').value;
-    var configText = modelLabel + ' — base: ' + baseStyle +
+    var configText = modelLabel +
       (selected.length ? '; options selected: ' + selected.join(', ') : '; no options selected');
     document.getElementById('hidConfiguration').value = configText;
     document.getElementById('hidBasePrice').value = fmt(basePrice);
@@ -377,9 +358,6 @@
     });
   });
 
-  document.querySelectorAll('input[name="base"]').forEach(function(r){
-    r.addEventListener('change', updateSummary);
-  });
   document.querySelectorAll('input[name="power"]').forEach(function(r){
     r.addEventListener('change', updateSummary);
   });

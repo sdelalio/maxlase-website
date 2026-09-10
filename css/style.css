@@ -141,6 +141,19 @@ nav.main-nav .dropdown a:hover{background:rgba(255,255,255,.07);color:var(--whit
   .hero h1{font-size:32px;}
 }
 
+/* ---------- Homepage video hero ---------- */
+.hero--video{position:relative;overflow:hidden;min-height:78vh;display:flex;align-items:center;padding:120px 0 96px;background:var(--navy-950) url(/assets/images/maxlase-home-hero-poster.jpg) center/cover no-repeat;}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.hero-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(10,14,20,.88) 0%,rgba(10,14,20,.62) 45%,rgba(10,14,20,.18) 100%),linear-gradient(0deg,rgba(10,14,20,.55) 0%,rgba(10,14,20,0) 35%);}
+.hero-video-content{position:relative;z-index:2;width:100%;}
+.hero-video-content .lead{max-width:560px;}
+.hero-credit{position:absolute;right:14px;bottom:10px;z-index:2;font-size:11px;color:rgba(255,255,255,.55);}
+@media(max-width:767px){
+  .hero--video{min-height:72vh;padding:96px 0 72px;}
+  .hero-shade{background:linear-gradient(0deg,rgba(10,14,20,.9) 0%,rgba(10,14,20,.55) 60%,rgba(10,14,20,.35) 100%);}
+}
+@media(prefers-reduced-motion:reduce){.hero-video{display:none;}}
+
 /* ---------- Trust bar ---------- */
 .trust-bar{background:var(--navy-900);color:var(--white);padding:0;}
 .trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}

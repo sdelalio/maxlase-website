@@ -6,7 +6,7 @@ Static site (no build step) for maxlase.com. Plain HTML/CSS/JS, ready to deploy 
 
 - `index.html` — homepage
 - `shop.html` — full product lineup + accessories
-- `products/` — individual product pages (100, 150, 200, 230X, 200P)
+- `products/` — individual product pages (100B, 150B, 200B, 230B, 200P)
 - `jewelers.html` / `industrial.html` — audience-specific landing pages
 - `technology.html` — Nd:YAG / how-it-works explainer, incl. why Nd:YAG vs. fiber for reflective metals
 - `support.html` — service, warranty, training

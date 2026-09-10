@@ -42,21 +42,25 @@
 </header>
 
 
-<section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <h1>Max power. Max value. Backed in the USA.</h1>
-      <p class="lead">Precision laser welders proudly engineered and supported entirely in the US &mdash; manufactured overseas for maximum value.</p>
-      <div class="hero-cta">
-        <a href="/shop.html" class="btn btn-primary">Shop Systems</a>
-        <a href="/contact.html" class="btn btn-outline">Talk to an Engineer</a>
-      </div>
-      <p style="margin-top:14px;"><a href="/selector.html" style="color:var(--amber-400);text-decoration:underline;font-size:14.5px;">Not sure which system fits? Take our 1-minute system finder &rarr;</a></p>
+<section class="hero hero--video">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true"
+         poster="/assets/images/maxlase-home-hero-poster.jpg">
+    <source src="/assets/videos/maxlase-home-hero-720.mp4" type="video/mp4" media="(max-width: 767px)">
+    <source src="/assets/videos/maxlase-home-hero-1080.webm" type="video/webm">
+    <source src="/assets/videos/maxlase-home-hero-1080.mp4" type="video/mp4">
+  </video>
+  <div class="hero-shade"></div>
+  <div class="container hero-video-content">
+    <h1>Max power. Max value. Backed in the USA.</h1>
+    <p class="lead">Precision laser welders proudly engineered and supported entirely in the US &mdash; manufactured overseas for maximum value.</p>
+    <div class="hero-cta">
+      <a href="/shop.html" class="btn btn-primary">Shop Systems</a>
+      <a href="/contact.html" class="btn btn-outline">Talk to an Engineer</a>
     </div>
-    <div class="hero-art">
-      <img src="/assets/images/maxlase-pro-hero.jpg" alt="MaxLase laser welding system" />
-    </div>
+    <p style="margin-top:14px;"><a href="/selector.html" style="color:var(--amber-400);text-decoration:underline;font-size:14.5px;">Not sure which system fits? Take our 1-minute system finder &rarr;</a></p>
   </div>
+  <small class="hero-credit">Repair footage used with permission</small>
+  <script>(function(){var v=document.querySelector('.hero-video');if(v&&window.matchMedia('(max-width: 767px)').matches){v.src='/assets/videos/maxlase-home-hero-720.mp4';v.play&&v.play().catch(function(){});}})();</script>
 </section>
 
 <div class="trust-bar">
