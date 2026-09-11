@@ -127,7 +127,7 @@
       <!-- Step 3: Penetration -->
       <div class="wiz-step" data-step="2">
         <div class="wiz-q">How much weld penetration do you need?</div>
-        <div class="wiz-sub">This is just for context — actual penetration depends on material and purity, so we key the recommendation off the materials you picked, not a target depth. Final settings always get confirmed on scrap.</div>
+        <div class="wiz-sub">This is just for context — actual penetration depends on material and purity, so we key the recommendation mostly off the materials you picked. Final settings always get confirmed on scrap.</div>
         <div class="choice-grid" data-field="penetration" data-required="1">
           <div class="choice" data-value="light">Under 0.5mm<span class="desc">Fine detail, thin-gauge findings</span></div>
           <div class="choice" data-value="medium">0.5–1mm<span class="desc">Typical prong and chain repair</span></div>
@@ -436,7 +436,7 @@
 
   // ---- Recommendation engine ----
   const SYSTEMS = {
-    '100':  { name:'MaxLase 100B',  tagline:'Most Popular',            fit:'All gold / silver — everyday bench work', url:'/products/maxlase-100b.html',  img:'/assets/images/maxlase-pro-hero.jpg', amps220:14, wire:'2.5mm²', price:9500 },
+    '100':  { name:'MaxLase 100B',  tagline:'Most Popular',            fit:'Karat gold, silver, platinum, stainless, titanium — everyday bench work', url:'/products/maxlase-100b.html',  img:'/assets/images/maxlase-pro-hero.jpg', amps220:14, wire:'2.5mm²', price:9500 },
     '150':  { name:'MaxLase 150B',  tagline:'More Than Enough',        fit:'Deeper penetration on heavier-gauge repair', url:'/products/maxlase-150b.html', img:'/assets/images/maxlase-pro-hero.jpg', amps220:18, wire:'2.5mm²', price:9500 },
     '200':  { name:'MaxLase 200B',  tagline:'For Most Demanding Power', fit:'Most demanding power in the bench-top range', url:'/products/maxlase-200b.html', img:'/assets/images/maxlase-pro-hero.jpg', amps220:18, wire:'2.5mm²', price:9500 },
     '230b': { name:'MaxLase 230B', tagline:'Max Power. Minimum Price Tag.', fit:'Highest-power bench-top system', url:'/products/maxlase-230b.html', img:'/assets/images/maxlase-230b-hero.jpg', amps220:18, wire:'2.5mm²', price:9500 },
@@ -448,17 +448,17 @@
     let modelKey;
     const has = v => a.materials.includes(v);
 
-    // Materials-driven tiering, per Ruisheng's engineering guidance (not a published depth spec —
-    // actual results vary by material and purity, so we key off the materials themselves):
-    //   Tier A (100W): 14K / 18K gold only
-    //   Tier B (150W): 18K gold + 925 silver
-    //   Tier C (200 / 230B / 200P): 22K or pure/24K gold, stainless steel, platinum, aluminum, or copper
-    const demanding = has('22k') || has('puregold') || has('stainless') || has('platinum') || has('aluminum') || has('copper');
+    // Materials-driven tiering (updated Sept 2026 per Steven's application guidance):
+    //   Tier A (100B): 14K / 18K gold, 925 silver, platinum, stainless steel
+    //   Tier B (150B): Tier A materials at 1-2mm+ penetration, or "other / not sure"
+    //   Tier C (200B / 230B / 200P): 22K or pure/24K gold, aluminum, or copper
+    const demanding = has('22k') || has('puregold') || has('aluminum') || has('copper');
+    const everyday = ['14k','18k','silver','platinum','stainless'];
+    const deep = (a.penetration==='deep' || a.penetration==='max');
     let tier;
     if(demanding) tier = 'C';
-    else if(has('18k') && has('silver')) tier = 'B';
-    else if(a.materials.length>0 && a.materials.every(m => m==='14k' || m==='18k')) tier = 'A';
-    else tier = 'B'; // ambiguous mix (e.g. silver alone, "other") — default to the safer middle tier
+    else if(a.materials.length>0 && a.materials.every(m => everyday.includes(m)) && !deep) tier = 'A';
+    else tier = 'B'; // deeper penetration, or "other / not sure" — default to the safer middle tier
 
     const highVolume = (a.dutyCycle==='75' || a.dutyCycle==='247');
     const wantsProduction = (a.industry==='industrial' || a.industry==='both') && highVolume && (a.linear==='yes' || a.rotary==='yes');
@@ -470,11 +470,11 @@
       if(a.rotary==='yes') why.push('Rotary work at production volume is best served by the 200P\'s larger D80 rotary capacity.');
     } else if(tier==='A'){
       modelKey = '100';
-      why.push('You\'re welding 14K and/or 18K gold — well within the MaxLase 100B\'s range, our most popular everyday system.');
+      why.push('Your materials (karat gold, silver, platinum or stainless) are well within the MaxLase 100B\'s range, our most popular everyday system.');
     } else if(tier==='B'){
       modelKey = '150';
-      if(has('18k') && has('silver')) why.push('18K gold plus 925 silver is the classic case for stepping up from the 100B to the 150B — a bit more pulse energy for the mix.');
-      else why.push('Your materials call for a bit more pulse energy than our base system — the 150B gives you that margin.');
+      if(deep) why.push('You need 1-2mm penetration — the 150B adds pulse energy over the 100B for heavier-gauge work.');
+      else why.push('With a mix of materials or some you\'re not sure about, the 150B gives you extra pulse energy margin over the 100B.');
     } else {
       // Tier C: choose between 200B and 230B on duty cycle
       if(highVolume){
@@ -485,9 +485,7 @@
         why.push('Your materials are more demanding to weld — the 200B gives you the most pulse energy and spot-size range in the bench-top lineup.');
       }
       if(has('22k') || has('puregold')) why.push('22K and pure/24K gold are softer and more reflective — the extra peak power keeps welds clean.');
-      if(has('stainless')) why.push('Stainless steel is well covered across the 200B / 230B / 200P range.');
       if(has('copper')) why.push('Copper is reflective and highly conductive — one of the more demanding metals to weld — so extra headroom helps.');
-      if(has('platinum')) why.push('Platinum benefits from the extra peak power at this end of the lineup.');
       if(has('aluminum')) why.push('Aluminum benefits from the extra peak power Nd:YAG systems carry at this end of the lineup.');
     }
 
